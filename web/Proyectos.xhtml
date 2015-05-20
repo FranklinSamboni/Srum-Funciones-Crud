@@ -1,0 +1,182 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    
+    <h:head>
+        <title>Proyectos</title>
+     </h:head>
+    
+    <h:body>
+     <p:megaMenu  style="margin-top:20px">
+        <p:menuitem value="HOME" url="Principal.xhtml" icon="ui-icon-home" />
+        <p:menuitem value="Proyectos" icon="ui-icon-document" url="Proyectos.xhtml"/>
+        <p:menuitem value="Perfil" icon="ui-icon-pencil" url="Perfil.xhtml"/>
+        <p:menuitem value="Salir" url="index.xhtml" icon="ui-icon-close"/>
+     </p:megaMenu>
+     
+      <h3>Lista proyectos</h3>
+
+      
+    <h:form id="CrearProyectoForm">
+      
+          <p:dialog id="CrearProyectoDlg" widgetVar="CrearProyectoDialog" modal="true" header="Nuevo proyecto" showEffect="fade" hideEffect="fade">
+                
+              <h:panelGroup id="displayCrear">
+                    <p:panelGrid columns="2" >
+                        <h:outputText value="Nombre proyecto"/>
+                        <p:inputText value="#{listaProyectoBean.seleccion.nameProyecto}" 
+                                     maxlength="180"
+                                     required="true" 
+                                     requiredMessage="No ha digitado el nombre del proyecto"/>
+                        <h:outputText value="Descripcion"/>
+                        <p:inputTextarea value="#{listaProyectoBean.seleccion.descriptionProyecto}"/>
+                        <h:outputText value="Fecha de inicio"/>
+                        <p:calendar value="#{listaProyectoBean.seleccion.begindateProyecto}"
+                                    required="true"
+                                    requiredMessage="No ha seleccionado la fecha de inicio"/>
+                        <h:outputText value="Fecha de finalizacion"/>
+                        <p:calendar value="#{listaProyectoBean.seleccion.enddateProyecto}"/>
+                        
+                        <h:outputText value="Fecha de registro"/>
+                        <p:calendar value="#{listaProyectoBean.seleccion.registrationdateProyecto}"
+                                    required="true"
+                                    requiredMessage="No ha seleccionado la fecha de inicio"/>
+                        <h:outputText value="Fecha actualizacion"/>
+                        <p:calendar value="#{listaProyectoBean.seleccion.updatedateProyecto}"/>
+                    </p:panelGrid>
+                  <p:commandButton actionListener="#{listaProyectoBean.crearProyecto}" value="Crear" update=":ListaProyectos:listaDatosProyectos" oncomplete="PF('CrearProyectoDialog').hide()"/>
+                  <p:commandButton value="Cancelar" onclick="PF('CrearProyectoDialog').hide()"/>
+                </h:panelGroup>
+
+        </p:dialog>
+    </h:form>
+      
+        
+    <h:form id="VerProyectoForm">
+      <p:dialog id="VerProyectoDlg" widgetVar="VerProyectoDialog" modal="true" header="Detalles del proyecto" showEffect="fade" hideEffect="fade">
+
+          <h:panelGroup id="displayVer">
+                    <p:panelGrid columns="2" columnClasses="column" rendered="#{listaProyectoBean.seleccion != null}">
+
+                        <h:outputText value="Codigo"/>
+                        <h:outputText value="#{listaProyectoBean.seleccion.idproyecto}" title="Codigo"/>
+
+                        <h:outputText value="Nombre Proyecto"/>
+                        <h:outputText value="#{listaProyectoBean.seleccion.nameProyecto}" title="Nombre Proyecto"/>
+
+                        <h:outputText value="Descripcion"/>
+                        <h:outputText value="#{listaProyectoBean.seleccion.descriptionProyecto}" title="Descripcion"/>
+
+                        <h:outputText value="Fecha de inicio"/>
+                        <h:outputText value="#{listaProyectoBean.seleccion.begindateProyecto}" title="Fecha de inicio"/>
+
+                        <h:outputText value="Fecha de terminacion"/>
+                        <h:outputText value="#{listaProyectoBean.seleccion.enddateProyecto}" title="Fecha de terminacion"/>
+
+                        <h:outputText value="Director"/>
+                        <h:outputText value="#{listaProyectoBean.seleccion.manager.name}" title="Director"/>
+
+                        <h:outputText value="Fecha de registro"/>
+                        <h:outputText value="#{listaProyectoBean.seleccion.registrationdateProyecto}" title="Fecha de registro"/>
+
+                        <h:outputText value="Fecha de Actualizacion"/>
+                        <h:outputText value="#{listaProyectoBean.seleccion.updatedateProyecto}" title="Fecha de Actualizacion"/>
+                    </p:panelGrid>
+                    <p:commandButton value="Cerrar" onclick="PF('VerProyectoDialog').hide()"/>
+                </h:panelGroup>
+         </p:dialog>
+       </h:form>
+     
+    <h:form id="EditarProyectoForm">
+
+        <p:dialog id="EditarProyectoDlg" widgetVar="EditarProyectoDialog" modal="true" header="Editar proyecto" showEffect="fade" hideEffect="fade">
+            <h:panelGroup id="displayEditar">
+                    <p:panelGrid  columns="2" columnClasses="column" rendered="#{listaProyectoBean.seleccion != null}">
+                        
+                        <p:outputLabel value="Nombre del Proyecto" for="nameProyecto" />
+                        <p:inputText id="nameProyecto" value="#{listaProyectoBean.seleccion.nameProyecto}" title="Nombre del Proyecto" required="true" requiredMessage="Se requiere Nombre" size="250" maxlength="250"/>
+
+                        <p:outputLabel value="Descripcion" for="descriptionProyecto" />
+                        <p:inputTextarea rows="4" cols="30" id="descriptionProyecto" value="#{listaProyectoBean.seleccion.descriptionProyecto}" title="Descripcion" />
+
+                        <p:outputLabel value="Fecha de inicio" for="begindateProyecto" />
+                        <p:calendar id="begindateProyecto" pattern="MM/dd/yyyy" value="#{listaProyectoBean.seleccion.begindateProyecto}" title="Fecha de inicio" required="true" requiredMessage="Se requiere Fecha de Inicio" showOn="button"/>
+
+                        <p:outputLabel value="Fecha de terminacion" for="enddateProyecto" />
+                        <p:calendar id="enddateProyecto" pattern="MM/dd/yyyy" value="#{listaProyectoBean.seleccion.enddateProyecto}" title="Fecha de terminacion"  showOn="button"/>
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{listaProyectoBean.guardarProyecto}" value="Guardar" update=":ListaProyectos:listaDatosProyectos" oncomplete="PF('EditarProyectoDialog').hide()"/>
+                    <p:commandButton value="Cancelar" onclick="PF('EditarProyectoDialog').hide()"/>
+                </h:panelGroup>
+
+            </p:dialog>
+       </h:form>
+
+      
+      <h:form id="ListaProyectos">
+        
+        <p:panel header="Lista de Proyectos">
+            <p:contextMenu id="TablaProyectosContextMenu" for="listaDatosProyectos">  
+                <p:menuitem value="Crear" onclick="document.getElementById('ListaProyectos:crearButton').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="Ver" onclick="document.getElementById('ListaProyectos:verButton').click();" icon="ui-icon-search"/>
+                <p:menuitem value="Editar" onclick="document.getElementById('ListaProyectos:editarButton').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="Eliminar" onclick="document.getElementById('ListaProyectos:eliminarButton').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="listaDatosProyectos"
+                         value="#{listaProyectoBean.list}"
+                         var="pro"
+                         rowKey="#{pro.idproyecto}"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{listaProyectoBean.seleccion}">
+
+                <p:ajax event="rowSelect"   update=":ListaProyectos:crearButton :ListaProyectos:verButton :ListaProyectos:editarButton :ListaProyectos:eliminarButton :ListaProyectos:TablaProyectosContextMenu"/>
+                <p:ajax event="rowUnselect" update=":ListaProyectos:crearButton :ListaProyectos:verButton :ListaProyectos:editarButton :ListaProyectos:eliminarButton :ListaProyectos:TablaProyectosContextMenu"/>
+                <p:ajax event="contextMenu" update=":ListaProyectos:crearButton :ListaProyectos:verButton :ListaProyectos:editarButton :ListaProyectos:eliminarButton"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('ListaProyectos:verButton').click();"/>
+
+                <p:column sortBy="#{pro.idproyecto}" filterBy="#{pro.idproyecto}">
+                    <f:facet name="header">
+                        <h:outputText value="Codigo Proyecto"/>
+                    </f:facet>
+                    <h:outputText value="#{pro.idproyecto}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{pro.nameProyecto}" filterBy="#{pro.nameProyecto}">
+                    <f:facet name="header">
+                        <h:outputText value="Nombre Proyecto"/>
+                    </f:facet>
+                    <h:outputText value="#{pro.nameProyecto}"/>
+                </p:column>
+            </p:dataTable>
+
+        </p:panel>
+          
+          <p:commandButton id="crearButton" icon="ui-icon-plus"   value="Crear Proyecto"  update=":CrearProyectoForm" oncomplete="PF('CrearProyectoDialog').show()" actionListener="#{listaProyectoBean.nuevoProyecto}"/>
+          <p:commandButton id="verButton"   style="visibility: hidden;" icon="ui-icon-search" value="Ver" update=":VerProyectoForm" oncomplete="PF('VerProyectoDialog').show()" disabled="#{empty listaProyectoBean.seleccion}"/>
+          <p:commandButton id="editarButton"   style="visibility: hidden;" icon="ui-icon-pencil" value="Editar" update=":EditarProyectoForm" oncomplete="PF('EditarProyectoDialog').show()" disabled="#{empty listaProyectoBean.seleccion}"/>
+          
+          <p:commandButton id="eliminarButton" style="visibility: hidden;" icon="ui-icon-trash"  value="Eliminar" actionListener="#{listaProyectoBean.eliminarProyecto}" update=":ListaProyectos:listaDatosProyectos" disabled="#{empty listaProyectoBean.seleccion}">
+              <p:confirm header="Confirmacion" message="Esta seguro de realizar esta accion?" icon="ui-icon-alert"/>
+          </p:commandButton>
+       
+          <p:confirmDialog global="true">  
+              <p:commandButton value="si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+              <p:commandButton value="no" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+          </p:confirmDialog>
+      
+      </h:form>
+    
+    </h:body> 
+      
+</html>
+

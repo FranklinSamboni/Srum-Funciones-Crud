@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="CrearProyectoDlg" widgetVar="CrearProyectoDialog" modal="true" resizable="false" appendTo="@(body)" header="Crear Proyecto" closeOnEscape="true">
+
+            <h:form id="CrearProyectoForm">
+
+                <h:panelGroup id="display" rendered="#{listaProyectoBean.seleccion != null}">
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="Nombre Del proyecto" for="nameProyecto" />
+                        <p:inputText id="nameProyecto" value="#{listaProyectoBean.seleccion.nameProyecto}" title="Nombre proyecto" required="true" requiredMessage="Se requiere Nombre" size="250" maxlength="250"/>
+
+                        <p:outputLabel value="Descripcion" for="descriptionProyecto" />
+                        <p:inputTextarea rows="4" cols="30" id="descriptionProyecto" value="#{listaProyectoBean.seleccion.descriptionProyecto}" title="Descripcion" />
+
+                        <p:outputLabel value="Fecha de Inicio" for="begindateProyecto" />
+                        <p:calendar id="begindateProyecto" pattern="MM/dd/yyyy" value="#{listaProyectoBean.seleccion.begindateProyecto}" title="Fecha de inicio" required="true" requiredMessage="Se requiere fecha de inicio" showOn="button"/>
+
+                        <p:outputLabel value="Fecha de terminacion" for="enddateProyecto" />
+                        <p:calendar id="enddateProyecto" pattern="MM/dd/yyyy" value="#{listaProyectoBean.seleccion.enddateProyecto}" title="Fecha de terminacion"  showOn="button"/>
+
+                        <p:outputLabel value="fecha de registro" for="registrationdateProyecto" />
+                        <p:calendar id="registrationdateProyecto" pattern="MM/dd/yyyy" value="#{listaProyectoBean.seleccion.registrationdateProyecto}" title="Fecha de registro" required="true" requiredMessage="Se requiere fecha de registro" showOn="button"/>
+
+                        <p:outputLabel value="Fecha de actualizacion" for="updatedateProyecto" />
+                        <p:calendar id="updatedateProyecto" pattern="MM/dd/yyyy" value="#{listaProyectoBean.seleccion.updatedateProyecto}" title="Fecha de actualizacion" required="true" requiredMessage="Se requiere fecha de actualizacion" showOn="button"/>
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{listaProyectoBean.crearProyecto}" value="Crear" update="display,:ListaProyectos:listaDatosProyectos,:growl" oncomplete="handleSubmit(xhr,status,args,PF('CrearProyectoDialog'));">
+                        <p:confirm header="Confirmacion" message="Seguro?" icon="ui-icon-alert"/>
+                    </p:commandButton>
+
+                    <p:commandButton value="Cancelar" onclick="PF('CrearProyectoDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

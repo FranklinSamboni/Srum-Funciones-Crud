@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+   
+      <ui:composition>
+
+        <p:dialog id="VerProyectoDlg" widgetVar="VerProyectoDialog" modal="true" resizable="false"  appendTo="@(body)" header="Detaller del Proyecto" closeOnEscape="true">
+
+            <h:form id="VerProyectoForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column" rendered="#{listaProyectoBean.seleccion != null}">
+
+                        <h:outputText value="Codigo"/>
+                        <h:outputText value="#{listaProyectoBean.seleccion.idproyecto}" title="Codigo"/>
+
+                        <h:outputText value="Nombre Proyecto"/>
+                        <h:outputText value="#{listaProyectoBean.seleccion.nameProyecto}" title="Nombre Proyecto"/>
+
+                        <h:outputText value="Descripcion"/>
+                        <h:outputText value="#{listaProyectoBean.seleccion.descriptionProyecto}" title="Descripcion"/>
+
+                        <h:outputText value="Fecha de inicio"/>
+                        <h:outputText value="#{listaProyectoBean.seleccion.begindateProyecto}" title="Fecha de inicio"/>
+
+                        <h:outputText value="Fecha de terminacion"/>
+                        <h:outputText value="#{listaProyectoBean.seleccion.enddateProyecto}" title="Fecha de terminacion"/>
+
+                        <h:outputText value="Director"/>
+                        <h:outputText value="#{listaProyectoBean.seleccion.manager.iduser}" title="Director"/>
+
+                        <h:outputText value="Fecha de registro"/>
+                        <h:outputText value="#{listaProyectoBean.seleccion.registrationdateProyecto}" title="Fecha de registro"/>
+
+                        <h:outputText value="Fecha de Actualizacion"/>
+                        <h:outputText value="#{listaProyectoBean.seleccion.updatedateProyecto}" title="Fecha de Actualizacion"/>
+                    </p:panelGrid>
+                    <p:commandButton value="Cerrar" onclick="PF('VerProyectoDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>   
+</html>

@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title><h:outputText value="Login"/></title>
+    </h:head>
+    <h:body>
+        <h2 style="top: 100px; position: absolute; left: 585px"><h:outputText value="BIENVENIDO" style="font-style: italic; color: brown"/></h2>
+        <h:form>
+            <h:panelGrid columns="2" style="position: absolute; top: 250px; left: 500px">
+                <f:facet name="header"><h:outputText value="Inicio" style="color: brown; font-size: 20px;font-style: italic"/></f:facet>
+                <h:outputText value="Usuario" style="color: brown; font-size: 20px;font-style: italic"/>
+                <p:inputText value="#{sessionBean.login}" style="color: brown; font-size: 20px;font-style: italic"/>
+                <h:outputText value="Clave" style="color: brown; font-size: 20px;font-style: italic"/>
+                <p:password value="#{sessionBean.password}" style=";color: brown"/>
+                  
+                <f:facet name="footer">
+                    <p:growl id="growl" showDetail="true" sticky="true"/>  
+                    <p:commandButton value="Ingresar"  action="#{sessionBean.validate}" update="growl" style="position: absolute; top: 150px; left: 85px;color: brown; font-size: 20px;font-style: italic"/>
+                    <h:link value="Registrarse" outcome="RegistrarUsuarios"/>
+                </f:facet>  
+            </h:panelGrid>
+        </h:form>
+    </h:body>
+</html>
+

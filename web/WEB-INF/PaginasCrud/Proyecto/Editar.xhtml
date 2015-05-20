@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    
+    <ui:composition>
+        <p:dialog id="EditarProyectoDlg" widgetVar="EditarProyectoDialog" modal="true" resizable="false"  appendTo="@(body)" header="Editar Proyecto" closeOnEscape="true">
+
+            <h:form id="EditarProyectoForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid  columns="2" columnClasses="column" rendered="#{listaProyectoBean.seleccion != null}">
+                        
+                        <p:outputLabel value="Nombre del Proyecto" for="nameProyecto" />
+                        <p:inputText id="nameProyecto" value="#{listaProyectoBean.seleccion.nameProyecto}" title="Nombre del Proyecto" required="true" requiredMessage="Se requiere Nombre" size="250" maxlength="250"/>
+
+                        <p:outputLabel value="Descripcion" for="descriptionProyecto" />
+                        <p:inputTextarea rows="4" cols="30" id="descriptionProyecto" value="#{listaProyectoBean.seleccion.descriptionProyecto}" title="Descripcion" />
+
+                        <p:outputLabel value="Fecha de inicio" for="begindateProyecto" />
+                        <p:calendar id="begindateProyecto" pattern="MM/dd/yyyy" value="#{listaProyectoBean.seleccion.begindateProyecto}" title="Fecha de inicio" required="true" requiredMessage="Se requiere Fecha de Inicio" showOn="button"/>
+
+                        <p:outputLabel value="Fecha de terminacion" for="enddateProyecto" />
+                        <p:calendar id="enddateProyecto" pattern="MM/dd/yyyy" value="#{listaProyectoBean.seleccion.enddateProyecto}" title="Fecha de terminacion"  showOn="button"/>
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{listaProyectoBean.guardarProyecto}" value="Guardar" update="display,:ListaProyectos:listaDatosProyectos,:growl" oncomplete="handleSubmit(xhr,status,args,PF('EditarProyectoDialog'));">
+                        <p:confirm header="Confirmar" message="Esta Seguro?" icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    <p:commandButton value="Cancelar" onclick="PF('UserEditDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>
