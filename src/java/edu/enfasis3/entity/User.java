@@ -83,6 +83,8 @@ public class User implements Serializable {
     private String photo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "manager")
     private List<Proyecto> proyectoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "iduser")
+    private List<Participante> participanteList;
 
     public User() {
     }
@@ -172,6 +174,15 @@ public class User implements Serializable {
 
     public void setProyectoList(List<Proyecto> proyectoList) {
         this.proyectoList = proyectoList;
+    }
+
+    @XmlTransient
+    public List<Participante> getParticipanteList() {
+        return participanteList;
+    }
+
+    public void setParticipanteList(List<Participante> participanteList) {
+        this.participanteList = participanteList;
     }
 
     @Override

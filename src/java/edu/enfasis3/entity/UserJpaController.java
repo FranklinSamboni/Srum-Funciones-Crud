@@ -40,9 +40,12 @@ public class UserJpaController implements Serializable {
         if (user.getProyectoList() == null) {
             user.setProyectoList(new ArrayList<Proyecto>());
         }
+        if (user.getParticipanteList() == null) {
+            user.setParticipanteList(new ArrayList<Participante>());
+        }
         EntityManager em = null;
         try {
-           // utx.begin();
+            //utx.begin();
             em = getEntityManager();
             em.getTransaction().begin();
             List<Proyecto> attachedProyectoList = new ArrayList<Proyecto>();
@@ -51,6 +54,12 @@ public class UserJpaController implements Serializable {
                 attachedProyectoList.add(proyectoListProyectoToAttach);
             }
             user.setProyectoList(attachedProyectoList);
+            List<Participante> attachedParticipanteList = new ArrayList<Participante>();
+            for (Participante participanteListParticipanteToAttach : user.getParticipanteList()) {
+                participanteListParticipanteToAttach = em.getReference(participanteListParticipanteToAttach.getClass(), participanteListParticipanteToAttach.getIdparticipante());
+                attachedParticipanteList.add(participanteListParticipanteToAttach);
+            }
+            user.setParticipanteList(attachedParticipanteList);
             em.persist(user);
             for (Proyecto proyectoListProyecto : user.getProyectoList()) {
                 User oldManagerOfProyectoListProyecto = proyectoListProyecto.getManager();
@@ -61,11 +70,20 @@ public class UserJpaController implements Serializable {
                     oldManagerOfProyectoListProyecto = em.merge(oldManagerOfProyectoListProyecto);
                 }
             }
-            //utx.commit();
+            for (Participante participanteListParticipante : user.getParticipanteList()) {
+                User oldIduserOfParticipanteListParticipante = participanteListParticipante.getIduser();
+                participanteListParticipante.setIduser(user);
+                participanteListParticipante = em.merge(participanteListParticipante);
+                if (oldIduserOfParticipanteListParticipante != null) {
+                    oldIduserOfParticipanteListParticipante.getParticipanteList().remove(participanteListParticipante);
+                    oldIduserOfParticipanteListParticipante = em.merge(oldIduserOfParticipanteListParticipante);
+                }
+            }
+           // utx.commit();
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-              //  utx.rollback();
+               // utx.rollback();
                 em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
@@ -81,11 +99,14 @@ public class UserJpaController implements Serializable {
     public void edit(User user) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            utx.begin();
+           // utx.begin();
             em = getEntityManager();
+            em.getTransaction().begin();
             User persistentUser = em.find(User.class, user.getIduser());
             List<Proyecto> proyectoListOld = persistentUser.getProyectoList();
             List<Proyecto> proyectoListNew = user.getProyectoList();
+            List<Participante> participanteListOld = persistentUser.getParticipanteList();
+            List<Participante> participanteListNew = user.getParticipanteList();
             List<String> illegalOrphanMessages = null;
             for (Proyecto proyectoListOldProyecto : proyectoListOld) {
                 if (!proyectoListNew.contains(proyectoListOldProyecto)) {
@@ -93,6 +114,14 @@ public class UserJpaController implements Serializable {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain Proyecto " + proyectoListOldProyecto + " since its manager field is not nullable.");
+                }
+            }
+            for (Participante participanteListOldParticipante : participanteListOld) {
+                if (!participanteListNew.contains(participanteListOldParticipante)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Participante " + participanteListOldParticipante + " since its iduser field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -105,6 +134,13 @@ public class UserJpaController implements Serializable {
             }
             proyectoListNew = attachedProyectoListNew;
             user.setProyectoList(proyectoListNew);
+            List<Participante> attachedParticipanteListNew = new ArrayList<Participante>();
+            for (Participante participanteListNewParticipanteToAttach : participanteListNew) {
+                participanteListNewParticipanteToAttach = em.getReference(participanteListNewParticipanteToAttach.getClass(), participanteListNewParticipanteToAttach.getIdparticipante());
+                attachedParticipanteListNew.add(participanteListNewParticipanteToAttach);
+            }
+            participanteListNew = attachedParticipanteListNew;
+            user.setParticipanteList(participanteListNew);
             user = em.merge(user);
             for (Proyecto proyectoListNewProyecto : proyectoListNew) {
                 if (!proyectoListOld.contains(proyectoListNewProyecto)) {
@@ -117,10 +153,23 @@ public class UserJpaController implements Serializable {
                     }
                 }
             }
-            utx.commit();
+            for (Participante participanteListNewParticipante : participanteListNew) {
+                if (!participanteListOld.contains(participanteListNewParticipante)) {
+                    User oldIduserOfParticipanteListNewParticipante = participanteListNewParticipante.getIduser();
+                    participanteListNewParticipante.setIduser(user);
+                    participanteListNewParticipante = em.merge(participanteListNewParticipante);
+                    if (oldIduserOfParticipanteListNewParticipante != null && !oldIduserOfParticipanteListNewParticipante.equals(user)) {
+                        oldIduserOfParticipanteListNewParticipante.getParticipanteList().remove(participanteListNewParticipante);
+                        oldIduserOfParticipanteListNewParticipante = em.merge(oldIduserOfParticipanteListNewParticipante);
+                    }
+                }
+            }
+           // utx.commit();
+            em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-                utx.rollback();
+             //   utx.rollback();
+                em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
@@ -142,8 +191,9 @@ public class UserJpaController implements Serializable {
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            utx.begin();
+          //  utx.begin();
             em = getEntityManager();
+            em.getTransaction().begin();
             User user;
             try {
                 user = em.getReference(User.class, id);
@@ -159,14 +209,23 @@ public class UserJpaController implements Serializable {
                 }
                 illegalOrphanMessages.add("This User (" + user + ") cannot be destroyed since the Proyecto " + proyectoListOrphanCheckProyecto + " in its proyectoList field has a non-nullable manager field.");
             }
+            List<Participante> participanteListOrphanCheck = user.getParticipanteList();
+            for (Participante participanteListOrphanCheckParticipante : participanteListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This User (" + user + ") cannot be destroyed since the Participante " + participanteListOrphanCheckParticipante + " in its participanteList field has a non-nullable iduser field.");
+            }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             em.remove(user);
-            utx.commit();
+            //utx.commit();
+            em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-                utx.rollback();
+              //  utx.rollback();
+                em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }

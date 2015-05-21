@@ -25,8 +25,8 @@ import javax.transaction.UserTransaction;
  */
 public class ActividadJpaController implements Serializable {
 
-    public ActividadJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
+    public ActividadJpaController(EntityManagerFactory emf) {
+        this.utx = null;
         this.emf = emf;
     }
     private UserTransaction utx = null;
@@ -42,8 +42,9 @@ public class ActividadJpaController implements Serializable {
         }
         EntityManager em = null;
         try {
-            utx.begin();
+            //utx.begin();
             em = getEntityManager();
+            em.getTransaction().begin();
             Lista idlista = actividad.getIdlista();
             if (idlista != null) {
                 idlista = em.getReference(idlista.getClass(), idlista.getIdlista());
@@ -69,10 +70,12 @@ public class ActividadJpaController implements Serializable {
                     oldIdactividadOfComentarioListComentario = em.merge(oldIdactividadOfComentarioListComentario);
                 }
             }
-            utx.commit();
+            //utx.commit();
+            em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-                utx.rollback();
+              //  utx.rollback();
+                em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
@@ -87,8 +90,9 @@ public class ActividadJpaController implements Serializable {
     public void edit(Actividad actividad) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            utx.begin();
+           // utx.begin();
             em = getEntityManager();
+            em.getTransaction().begin();
             Actividad persistentActividad = em.find(Actividad.class, actividad.getIdactividad());
             Lista idlistaOld = persistentActividad.getIdlista();
             Lista idlistaNew = actividad.getIdlista();
@@ -137,10 +141,12 @@ public class ActividadJpaController implements Serializable {
                     }
                 }
             }
-            utx.commit();
+           //utx.commit();
+            em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-                utx.rollback();
+            //    utx.rollback();
+                em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
@@ -162,8 +168,9 @@ public class ActividadJpaController implements Serializable {
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            utx.begin();
+            //utx.begin();
             em = getEntityManager();
+            em.getTransaction().begin();
             Actividad actividad;
             try {
                 actividad = em.getReference(Actividad.class, id);
@@ -188,10 +195,12 @@ public class ActividadJpaController implements Serializable {
                 idlista = em.merge(idlista);
             }
             em.remove(actividad);
-            utx.commit();
+            //utx.commit();
+            em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-                utx.rollback();
+               // utx.rollback();
+                em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }

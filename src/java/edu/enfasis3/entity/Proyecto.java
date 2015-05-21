@@ -82,6 +82,8 @@ public class Proyecto implements Serializable {
     @JoinColumn(name = "manager", referencedColumnName = "iduser")
     @ManyToOne(optional = false)
     private User manager;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idproyecto")
+    private List<Participante> participanteList;
 
     public Proyecto() {
     }
@@ -169,6 +171,15 @@ public class Proyecto implements Serializable {
 
     public void setManager(User manager) {
         this.manager = manager;
+    }
+
+    @XmlTransient
+    public List<Participante> getParticipanteList() {
+        return participanteList;
+    }
+
+    public void setParticipanteList(List<Participante> participanteList) {
+        this.participanteList = participanteList;
     }
 
     @Override

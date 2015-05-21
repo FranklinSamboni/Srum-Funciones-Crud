@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Comentarios</title>
+    </h:head>
+    <h:body>
+       <p:megaMenu  style="margin-top:20px">
+        <p:menuitem value="HOME" url="Principal.xhtml" icon="ui-icon-home" />
+        <p:menuitem value="Proyectos" icon="ui-icon-document" url="Proyectos.xhtml"/>
+        <p:menuitem value="Perfil" icon="ui-icon-pencil" url="Perfil.xhtml"/>
+        <p:menuitem value="Salir" url="index.xhtml" icon="ui-icon-close"/>
+       </p:megaMenu>
+        
+                 
+    <h:form id="CrearComentarioForm">
+      
+          <p:dialog id="CrearComentarioDlg" widgetVar="CrearComentarioDialog" modal="true" header="Crear Comentario" showEffect="fade" hideEffect="fade">
+                
+              <h:panelGroup id="displayCrear">
+                  
+                    <p:panelGrid columns="2" >
+                        <h:outputText value="Ingrese Id Actividad"/>
+                        <p:inputText value="#{comentarioBean.identificador}" required="true"/>
+                        
+                        <h:outputText value="Nombre Comentario"/>
+                        <p:inputText value="#{comentarioBean.comentario.nameComentario}" required="true"/>
+                        
+                        <h:outputText value="Descripcion"/>
+                        <p:inputTextarea value="#{comentarioBean.comentario.descriptionComentario}" required="true"/>
+                                     
+                    </p:panelGrid>
+                  <p:commandButton actionListener="#{comentarioBean.crearComentario}" value="Comentar" update=":Comentario:DatosComentario" oncomplete="PF('CrearComentarioDialog').hide()"/>
+                  <p:commandButton value="Cancelar" onclick="PF('CrearComentarioDialog').hide()"/>
+                </h:panelGroup>
+
+        </p:dialog>
+    </h:form>
+              
+    <h:form id="VerComentarioForm">
+      <p:dialog id="VerComentarioDlg" widgetVar="VerComentarioDialog" modal="true" header="Detalles Comentario" showEffect="fade" hideEffect="fade">
+
+          <h:panelGroup id="displayVer">
+              <p:panelGrid columns="2" columnClasses="column" rendered="#{comentarioBean.comentario != null}">
+
+                        <h:outputText value="Codigo"/>
+                        <h:outputText value="#{comentarioBean.comentario.idcomentario}" title="Codigo"/>
+
+                        <h:outputText value="Nombre de la Comentario"/>
+                        <h:outputText value="#{comentarioBean.comentario.nameComentario}" title="Nombre de la Comentario"/>
+
+                        <h:outputText value="Descripcion"/>
+                        <h:outputText value="#{comentarioBean.comentario.descriptionComentario}" title="Descripcion"/>
+                        
+                        <h:outputText value="Fecha de registro"/>
+                        <h:outputText value="#{comentarioBean.comentario.registrationdateComentario}" title="Fecha de registro"/>
+
+                        <h:outputText value="Actividad vinculada"/>
+                        <h:outputText value="#{comentarioBean.comentario.idactividad}" title="Actividad vinculada"/>
+
+                    </p:panelGrid>
+                    <p:commandButton value="Cerrar" onclick="PF('VerComentarioDialog').hide()"/>
+                </h:panelGroup>
+         </p:dialog>
+       </h:form>
+     
+    <h:form id="EditarComentarioForm">
+
+        <p:dialog id="EditarComentarioDlg" widgetVar="EditarComentarioDialog" modal="true"
+                  header="Editar Comentario" showEffect="fade" hideEffect="fade">
+            
+            <p:panelGrid  columns="2" rendered="#{comentarioBean.comentario != null}">
+                        
+                        <p:outputLabel value="Nombre del Comentario"/>
+                        <p:inputText value="#{comentarioBean.comentario.nameComentario}" required="true"/>
+
+                        <p:outputLabel value="Descripcion"/>
+                        <p:inputTextarea value="#{comentarioBean.comentario.descriptionComentario}" required="true" />
+   
+                    </p:panelGrid>
+            <p:commandButton actionListener="#{comentarioBean.guardarComentario}" value="Guardar" update=":Comentario:DatosComentario" oncomplete="PF('EditarComentarioDialog').hide()"/>
+                <p:commandButton value="Cancelar" onclick="PF('EditarComentarioDialog').hide()"/>
+          
+
+            </p:dialog>
+    </h:form>
+        
+    <h:form id="Comentario">
+        
+        <p:panel header="Comentarios">
+            <p:contextMenu id="TablaComentarioContextMenu" for="DatosComentario">  
+                <p:menuitem value="Crear" onclick="document.getElementById('Comentario:crearButton').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="Ver" onclick="document.getElementById('Comentario:verButton').click();" icon="ui-icon-search"/>
+                <p:menuitem value="Editar" onclick="document.getElementById('Comentario:editarButton').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="Eliminar" onclick="document.getElementById('Comentario:eliminarButton').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="DatosComentario"
+                         value="#{comentarioBean.listaComentario}"
+                         var="comentario"
+                         rowKey="#{comentario.idcomentario}"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{comentarioBean.comentario}">
+
+                <p:ajax event="rowSelect"   update=":Comentario:crearButton :Comentario:verButton :Comentario:editarButton :Comentario:eliminarButton :Comentario:TablaComentarioContextMenu"/>
+                <p:ajax event="rowUnselect" update=":Comentario:crearButton :Comentario:verButton :Comentario:editarButton :Comentario:eliminarButton :Comentario:TablaComentarioContextMenu"/>
+                <p:ajax event="contextMenu" update=":Comentario:crearButton :Comentario:verButton :Comentario:editarButton :Comentario:eliminarButton"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('Comentario:verButton').click();"/>
+
+                <p:column sortBy="#{comentario.idcomentario}" filterBy="#{comentario.idcomentario}">
+                    <f:facet name="header">
+                        <h:outputText value="Codigo del comentario"/>
+                    </f:facet>
+                    <h:outputText value="#{comentario.idcomentario}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{comentario.nameComentario}" filterBy="#{comentario.nameComentario}">
+                    <f:facet name="header">
+                        <h:outputText value="Nombre del comentario"/>
+                    </f:facet>
+                    <h:outputText value="#{comentario.nameComentario}"/>
+                </p:column>
+                
+                <p:column sortBy="#{comentario.descriptionComentario}" filterBy="#{comentario.descriptionComentario}">
+                    <f:facet name="header">
+                        <h:outputText value="Descripcion"/>
+                    </f:facet>
+                    <h:outputText value="#{comentario.descriptionComentario}"/>
+                </p:column>
+                
+            </p:dataTable>
+
+        </p:panel>
+          
+        <p:commandButton id="crearButton" icon="ui-icon-plus"   value="Crear comentario"  update=":CrearComentarioForm" oncomplete="PF('CrearComentarioDialog').show()"  actionListener="#{comentarioBean.nuevoComentario}"/>
+        <p:commandButton id="verButton"   style="visibility: hidden;" icon="ui-icon-search" value="Ver" update=":VerComentarioForm" oncomplete="PF('VerComentarioDialog').show()" disabled="#{empty comentarioBean.comentario}"/>
+          <p:commandButton id="editarButton"   style="visibility: hidden;" icon="ui-icon-pencil" value="Editar" update=":EditarComentarioForm" oncomplete="PF('EditarComentarioDialog').show()" disabled="#{empty comentarioBean.comentario}"/>
+          
+          <p:commandButton id="eliminarButton" style="visibility: hidden;" icon="ui-icon-trash"  value="Eliminar" actionListener="#{comentarioBean.eliminarComentario}" update=":Comentario:DatosComentario" disabled="#{empty comentarioBean.comentario}">
+              <p:confirm header="Confirmacion" message="Esta seguro de realizar esta accion?" icon="ui-icon-alert"/>
+          </p:commandButton>
+          
+          <p:commandButton id="VerComentarios"  icon="ui-icon-pencil" value="Ver Comentarios" action="Comentarios?faces-redirect=true"/>
+          
+       
+          <p:confirmDialog global="true">  
+              <p:commandButton value="si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+              <p:commandButton value="no" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+          </p:confirmDialog>
+      
+      </h:form>
+        
+        
+        
+    </h:body>
+</html>
+

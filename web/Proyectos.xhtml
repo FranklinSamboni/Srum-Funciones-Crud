@@ -7,6 +7,8 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     
+    
+    
     <h:head>
         <title>Proyectos</title>
      </h:head>
@@ -42,12 +44,6 @@
                         <h:outputText value="Fecha de finalizacion"/>
                         <p:calendar value="#{listaProyectoBean.seleccion.enddateProyecto}"/>
                         
-                        <h:outputText value="Fecha de registro"/>
-                        <p:calendar value="#{listaProyectoBean.seleccion.registrationdateProyecto}"
-                                    required="true"
-                                    requiredMessage="No ha seleccionado la fecha de inicio"/>
-                        <h:outputText value="Fecha actualizacion"/>
-                        <p:calendar value="#{listaProyectoBean.seleccion.updatedateProyecto}"/>
                     </p:panelGrid>
                   <p:commandButton actionListener="#{listaProyectoBean.crearProyecto}" value="Crear" update=":ListaProyectos:listaDatosProyectos" oncomplete="PF('CrearProyectoDialog').hide()"/>
                   <p:commandButton value="Cancelar" onclick="PF('CrearProyectoDialog').hide()"/>
@@ -95,8 +91,7 @@
     <h:form id="EditarProyectoForm">
 
         <p:dialog id="EditarProyectoDlg" widgetVar="EditarProyectoDialog" modal="true" header="Editar proyecto" showEffect="fade" hideEffect="fade">
-            <h:panelGroup id="displayEditar">
-                    <p:panelGrid  columns="2" columnClasses="column" rendered="#{listaProyectoBean.seleccion != null}">
+              <p:panelGrid  columns="2" columnClasses="column" rendered="#{listaProyectoBean.seleccion != null}">
                         
                         <p:outputLabel value="Nombre del Proyecto" for="nameProyecto" />
                         <p:inputText id="nameProyecto" value="#{listaProyectoBean.seleccion.nameProyecto}" title="Nombre del Proyecto" required="true" requiredMessage="Se requiere Nombre" size="250" maxlength="250"/>
@@ -113,8 +108,7 @@
                     </p:panelGrid>
                     <p:commandButton actionListener="#{listaProyectoBean.guardarProyecto}" value="Guardar" update=":ListaProyectos:listaDatosProyectos" oncomplete="PF('EditarProyectoDialog').hide()"/>
                     <p:commandButton value="Cancelar" onclick="PF('EditarProyectoDialog').hide()"/>
-                </h:panelGroup>
-
+           
             </p:dialog>
        </h:form>
 
@@ -127,6 +121,7 @@
                 <p:menuitem value="Ver" onclick="document.getElementById('ListaProyectos:verButton').click();" icon="ui-icon-search"/>
                 <p:menuitem value="Editar" onclick="document.getElementById('ListaProyectos:editarButton').click();" icon="ui-icon-pencil"/>
                 <p:menuitem value="Eliminar" onclick="document.getElementById('ListaProyectos:eliminarButton').click();" icon="ui-icon-trash"/>
+               
             </p:contextMenu>
             <p:dataTable id="listaDatosProyectos"
                          value="#{listaProyectoBean.list}"
@@ -168,12 +163,16 @@
           <p:commandButton id="eliminarButton" style="visibility: hidden;" icon="ui-icon-trash"  value="Eliminar" actionListener="#{listaProyectoBean.eliminarProyecto}" update=":ListaProyectos:listaDatosProyectos" disabled="#{empty listaProyectoBean.seleccion}">
               <p:confirm header="Confirmacion" message="Esta seguro de realizar esta accion?" icon="ui-icon-alert"/>
           </p:commandButton>
-       
+         
+          <p:commandButton value="Propiedades del proyecto" action="ListaActividades?faces-redirect=true" icon="ui-icon-search"/>
+            
+          
           <p:confirmDialog global="true">  
               <p:commandButton value="si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
               <p:commandButton value="no" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
           </p:confirmDialog>
       
+          
       </h:form>
     
     </h:body> 

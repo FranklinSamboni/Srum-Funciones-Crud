@@ -9,6 +9,7 @@ package edu.enfasis3.beans;
 import edu.enfasis3.entity.Proyecto;
 import edu.enfasis3.entity.ProyectoJpaController;
 import edu.enfasis3.entity.User;
+import java.io.Serializable;
 import java.util.Calendar;
 
 import java.util.Date;
@@ -29,72 +30,21 @@ import javax.persistence.Query;
  */
 @ManagedBean
 @ViewScoped
-public class ListaProyectoBean {
+public class ListaProyectoBean implements Serializable  {
 
     /**
      * Creates a new instance of ListaProyectoBean
      */
     private Proyecto seleccion ;
+    private Proyecto proyecto;
     private List<Proyecto> list;
+    private Integer idproyecto=2;
     
-    private String nombrePro;
-    private String descripcion;
-    private Date inicio;
-    private Date fin;
-    private Date registro;
-    private Date actualizacion;
+    
     
     public ListaProyectoBean() {
     }
 
-    public String getNombrePro() {
-        return nombrePro;
-    }
-
-    public void setNombrePro(String nombrePro) {
-        this.nombrePro = nombrePro;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public Date getInicio() {
-        return inicio;
-    }
-
-    public void setInicio(Date inicio) {
-        this.inicio = inicio;
-    }
-
-    public Date getFin() {
-        return fin;
-    }
-
-    public void setFin(Date fin) {
-        this.fin = fin;
-    }
-
-    public Date getRegistro() {
-        return registro;
-    }
-
-    public void setRegistro(Date registro) {
-        this.registro = registro;
-    }
-
-    public Date getActualizacion() {
-        return actualizacion;
-    }
-
-    public void setActualizacion(Date actualizacion) {
-        this.actualizacion = actualizacion;
-    }
-    
     public Proyecto getSeleccion() {
         return seleccion;
     }
@@ -103,20 +53,75 @@ public class ListaProyectoBean {
         this.seleccion = seleccion;
     }
 
+    public Integer getIdproyecto() {
+        return idproyecto;
+    }
 
+    public void setIdproyecto(Integer idproyecto) {
+        this.idproyecto = idproyecto;
+    }
+
+    
+    
     public List<Proyecto> getList() {
-        
+       
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
         EntityManager em = emf.createEntityManager();
         Query q = em.createNamedQuery("Proyecto.findAll");
         list = q.getResultList();
+        //FacesContext context = FacesContext.getCurrentInstance();
+       // User usuario = ((SessionBean)(context.getApplication().evaluateExpressionGet(
+       //             context, "#{sessionBean}", Object.class))).getUser();
         
+        //list = usuario.getProyectoList();
         return list;
+        
+        
+       /* EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
+        EntityManager em = emf.createEntityManager();
+        Query q = em.createNamedQuery("Proyecto.findAll");
+        list = q.getResultList();*/
+        
+    
     }
     
-
+ 
     public void setList(List<Proyecto> list) {
         this.list = list;
+    }
+
+    public Proyecto getProyecto() {
+        return proyecto;
+    }
+
+    public void setProyecto(Proyecto proyecto) {
+        this.proyecto = proyecto;
+    }
+    
+    
+    public String comprobacion (){
+       
+        if (seleccion!=null){
+           proyecto=seleccion;
+             /*
+            proyecto.setBegindateProyecto(seleccion.getBegindateProyecto());
+            proyecto.setDescriptionProyecto(seleccion.getDescriptionProyecto());
+            proyecto.setEnddateProyecto(seleccion.getEnddateProyecto());
+            proyecto.setIdproyecto(seleccion.getIdproyecto());
+            proyecto.setListaList(seleccion.getListaList());
+            proyecto.setManager(seleccion.getManager());
+            proyecto.setNameProyecto(seleccion.getNameProyecto());
+            proyecto.setParticipanteList(seleccion.getParticipanteList());
+            proyecto.setRegistrationdateProyecto(seleccion.getRegistrationdateProyecto());
+            proyecto.setUpdatedateProyecto(seleccion.getUpdatedateProyecto());
+            */
+        System.out.println("DETALLES DEL PROYECTO : "+ proyecto.getNameProyecto());
+        return "ListaActividades"+"?faces-redirect=true";
+        }
+        else{
+        return "Proyectos";
+        }
+    
     }
     
     public void nuevoProyecto(){
@@ -126,9 +131,15 @@ public class ListaProyectoBean {
     
     public void crearProyecto(){
         
+        
+        GregorianCalendar fecha = new GregorianCalendar();
+        Date d = fecha.getTime();
+        
+        seleccion.setRegistrationdateProyecto(d);
+        seleccion.setUpdatedateProyecto(d);
+        
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
         ProyectoJpaController pjc = new ProyectoJpaController(emf);
-        
         
         try {
             
@@ -159,15 +170,17 @@ public class ListaProyectoBean {
     
     public void guardarProyecto(){
     
+        GregorianCalendar fecha = new GregorianCalendar();
+        Date d = fecha.getTime();
+        
+        seleccion.setUpdatedateProyecto(d);
+        
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
         ProyectoJpaController pjc = new ProyectoJpaController(emf);
-        
-        System.out.println("NOMBRE PROYECTO MODIFICADO: "+ seleccion.getNameProyecto());
         
         try {
             
             pjc.edit(seleccion);
-            
             
         } catch(Exception e) {
             System.out.println(e);

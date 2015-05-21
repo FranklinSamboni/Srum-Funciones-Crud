@@ -1,0 +1,183 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Actividades</title>
+    </h:head>
+    <h:body>
+        <p:megaMenu  style="margin-top:20px">
+            <p:menuitem value="HOME" url="Principal.xhtml" icon="ui-icon-home" />
+            <p:menuitem value="Proyectos" icon="ui-icon-document" url="Proyectos.xhtml"/>
+            <p:menuitem value="Perfil" icon="ui-icon-pencil" url="Perfil.xhtml"/>
+            <p:menuitem value="Salir" url="index.xhtml" icon="ui-icon-close"/>
+        </p:megaMenu>
+        
+             
+    <h:form id="CrearActividadForm">
+      
+          <p:dialog id="CrearActividadDlg" widgetVar="CrearActividadDialog" modal="true" header="Crear Actividad" showEffect="fade" hideEffect="fade">
+                
+              <h:panelGroup id="displayCrear">
+                  
+                    <p:panelGrid columns="2" >
+                        <h:outputText value="Ingrese Id Lista"/>
+                        <p:inputText value="#{actividadBean.identificador}" required="true"/>
+                        
+                        <h:outputText value="Nombre Actividad"/>
+                        <p:inputText value="#{actividadBean.actividad.nameActividad}" required="true"/>
+                        
+                        <h:outputText value="Descripcion"/>
+                        <p:inputTextarea value="#{actividadBean.actividad.descriptionActividad}" required="true"/>
+                        
+                        <h:outputText value="Fecha de inicio"/>
+                        <p:calendar value="#{actividadBean.actividad.begindateActividad}" required="true"/>
+                        
+                        <h:outputText value="Fecha de finalizacion"/>
+                        <p:calendar value="#{actividadBean.actividad.enddateActividad}" required="true"/>
+                                     
+                    </p:panelGrid>
+                  <p:commandButton actionListener="#{actividadBean.crearActividad}" value="Crear Actividad" update=":Actividad:DatosActividad" oncomplete="PF('CrearActividadDialog').hide()"/>
+                  <p:commandButton value="Cancelar" onclick="PF('CrearActividadDialog').hide()"/>
+                </h:panelGroup>
+
+        </p:dialog>
+    </h:form>
+              
+    <h:form id="VerActividadForm">
+      <p:dialog id="VerActividadDlg" widgetVar="VerActividadDialog" modal="true" header="Detalles la Actividad" showEffect="fade" hideEffect="fade">
+
+          <h:panelGroup id="displayVer">
+              <p:panelGrid columns="2" columnClasses="column" rendered="#{actividadBean.actividad != null}">
+
+                        <h:outputText value="Codigo"/>
+                        <h:outputText value="#{actividadBean.actividad.idactividad}" title="Codigo"/>
+
+                        <h:outputText value="Nombre de la Actividad"/>
+                        <h:outputText value="#{actividadBean.actividad.nameActividad}" title="Nombre de la Actividad"/>
+
+                        <h:outputText value="Descripcion"/>
+                        <h:outputText value="#{actividadBean.actividad.descriptionActividad}" title="Descripcion"/>
+                        
+                        <h:outputText value="Fecha de inicio"/>
+                        <h:outputText value="#{actividadBean.actividad.begindateActividad}" title="Fecha de inicio"/>
+
+                        <h:outputText value="Fecha de finalizacion"/>
+                        <h:outputText value="#{actividadBean.actividad.enddateActividad}" title="Fecha de finalizacion"/>
+                        
+                        <h:outputText value="Fecha de registro"/>
+                        <h:outputText value="#{actividadBean.actividad.registrariondateActividad}" title="Fecha de registro"/>
+
+                        <h:outputText value="Fecha de actualizacion"/>
+                        <h:outputText value="#{actividadBean.actividad.updatedateActividad}" title="Fecha de actualizacion"/>
+
+                        <h:outputText value="Lista de actividades vinculada"/>
+                        <h:outputText value="#{actividadBean.actividad.idactividad}" title="Lista de actividad vinculada"/>
+
+                    </p:panelGrid>
+                    <p:commandButton value="Cerrar" onclick="PF('VerActividadDialog').hide()"/>
+                </h:panelGroup>
+         </p:dialog>
+       </h:form>
+     
+    <h:form id="EditarActividadForm">
+
+        <p:dialog id="EditarActividadDlg" widgetVar="EditarActividadDialog" modal="true"
+                  header="Editar Actividad" showEffect="fade" hideEffect="fade">
+            
+            <p:panelGrid  columns="2" rendered="#{actividadBean.actividad != null}">
+                        
+                        <p:outputLabel value="Nombre de la Actividad"/>
+                        <p:inputText value="#{actividadBean.actividad.nameActividad}" required="true"/>
+
+                        <p:outputLabel value="Descripcion"/>
+                        <p:inputTextarea value="#{actividadBean.actividad.descriptionActividad}" required="true" />
+   
+                        <h:outputText value="Fecha de inicio"/>
+                        <p:calendar value="#{actividadBean.actividad.begindateActividad}" required="true"/>
+                        
+                        <h:outputText value="Fecha de finalizacion"/>
+                        <p:calendar value="#{actividadBean.actividad.enddateActividad}" required="true"/>
+                        
+                    </p:panelGrid>
+                <p:commandButton actionListener="#{actividadBean.guardarActividad}" value="Guardar" update=":Actividad:DatosActividad" oncomplete="PF('EditarActividadDialog').hide()"/>
+                <p:commandButton value="Cancelar" onclick="PF('EditarActividadDialog').hide()"/>
+          
+
+            </p:dialog>
+    </h:form>
+        
+    <h:form id="Actividad">
+        
+        <p:panel header="Actividades">
+            <p:contextMenu id="TablaActividadContextMenu" for="DatosActividad">  
+                <p:menuitem value="Crear" onclick="document.getElementById('Actividad:crearButton').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="Ver" onclick="document.getElementById('Actividad:verButton').click();" icon="ui-icon-search"/>
+                <p:menuitem value="Editar" onclick="document.getElementById('Actividad:editarButton').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="Eliminar" onclick="document.getElementById('Actividad:eliminarButton').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="DatosActividad"
+                         value="#{actividadBean.listaActividad}"
+                         var="actividad"
+                         rowKey="#{actividad.idactividad}"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{actividadBean.actividad}">
+
+                <p:ajax event="rowSelect"   update=":Actividad:crearButton :Actividad:verButton :Actividad:editarButton :Actividad:eliminarButton :Actividad:TablaActividadContextMenu"/>
+                <p:ajax event="rowUnselect" update=":Actividad:crearButton :Actividad:verButton :Actividad:editarButton :Actividad:eliminarButton :Actividad:TablaActividadContextMenu"/>
+                <p:ajax event="contextMenu" update=":Actividad:crearButton :Actividad:verButton :Actividad:editarButton :Actividad:eliminarButton"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('Actividad:verButton').click();"/>
+
+                <p:column sortBy="#{actividad.idactividad}" filterBy="#{actividad.idactividad}">
+                    <f:facet name="header">
+                        <h:outputText value="Codigo de la Actividad"/>
+                    </f:facet>
+                    <h:outputText value="#{actividad.idactividad}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{actividad.nameActividad}" filterBy="#{actividad.nameActividad}">
+                    <f:facet name="header">
+                        <h:outputText value="Nombre de la Actividad"/>
+                    </f:facet>
+                    <h:outputText value="#{actividad.nameActividad}"/>
+                </p:column>
+                
+                <p:column sortBy="#{actividad.descriptionActividad}" filterBy="#{actividad.descriptionActividad}">
+                    <f:facet name="header">
+                        <h:outputText value="Descripcion"/>
+                    </f:facet>
+                    <h:outputText value="#{actividad.descriptionActividad}"/>
+                </p:column>
+                
+            </p:dataTable>
+
+        </p:panel>
+          
+          <p:commandButton id="crearButton" icon="ui-icon-plus"   value="Crear Actividad"  update=":CrearActividadForm" oncomplete="PF('CrearActividadDialog').show()"  actionListener="#{actividadBean.nuevaActividad}"/>
+          <p:commandButton id="verButton"   style="visibility: hidden;" icon="ui-icon-search" value="Ver" update=":VerActividadForm" oncomplete="PF('VerActividadDialog').show()" disabled="#{empty actividadBean.actividad}"/>
+          <p:commandButton id="editarButton"   style="visibility: hidden;" icon="ui-icon-pencil" value="Editar" update=":EditarActividadForm" oncomplete="PF('EditarActividadDialog').show()" disabled="#{empty actividadBean.actividad}"/>
+          
+          <p:commandButton id="eliminarButton" style="visibility: hidden;" icon="ui-icon-trash"  value="Eliminar" actionListener="#{actividadBean.eliminarActividad}" update=":Actividad:DatosActividad" disabled="#{empty actividadBean.actividad}">
+              <p:confirm header="Confirmacion" message="Esta seguro de realizar esta accion?" icon="ui-icon-alert"/>
+          </p:commandButton>
+          
+          <p:commandButton id="VerComentarios"  icon="ui-icon-pencil" value="Ver Comentarios" action="Comentarios?faces-redirect=true"/>
+          
+       
+          <p:confirmDialog global="true">  
+              <p:commandButton value="si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+              <p:commandButton value="no" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+          </p:confirmDialog>
+      
+      </h:form>
+        
+        
+    </h:body>
+</html>
+

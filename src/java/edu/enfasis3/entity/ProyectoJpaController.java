@@ -40,6 +40,9 @@ public class ProyectoJpaController implements Serializable {
         if (proyecto.getListaList() == null) {
             proyecto.setListaList(new ArrayList<Lista>());
         }
+        if (proyecto.getParticipanteList() == null) {
+            proyecto.setParticipanteList(new ArrayList<Participante>());
+        }
         EntityManager em = null;
         try {
           //  utx.begin();
@@ -56,6 +59,12 @@ public class ProyectoJpaController implements Serializable {
                 attachedListaList.add(listaListListaToAttach);
             }
             proyecto.setListaList(attachedListaList);
+            List<Participante> attachedParticipanteList = new ArrayList<Participante>();
+            for (Participante participanteListParticipanteToAttach : proyecto.getParticipanteList()) {
+                participanteListParticipanteToAttach = em.getReference(participanteListParticipanteToAttach.getClass(), participanteListParticipanteToAttach.getIdparticipante());
+                attachedParticipanteList.add(participanteListParticipanteToAttach);
+            }
+            proyecto.setParticipanteList(attachedParticipanteList);
             em.persist(proyecto);
             if (manager != null) {
                 manager.getProyectoList().add(proyecto);
@@ -70,11 +79,20 @@ public class ProyectoJpaController implements Serializable {
                     oldIdproyectoOfListaListLista = em.merge(oldIdproyectoOfListaListLista);
                 }
             }
+            for (Participante participanteListParticipante : proyecto.getParticipanteList()) {
+                Proyecto oldIdproyectoOfParticipanteListParticipante = participanteListParticipante.getIdproyecto();
+                participanteListParticipante.setIdproyecto(proyecto);
+                participanteListParticipante = em.merge(participanteListParticipante);
+                if (oldIdproyectoOfParticipanteListParticipante != null) {
+                    oldIdproyectoOfParticipanteListParticipante.getParticipanteList().remove(participanteListParticipante);
+                    oldIdproyectoOfParticipanteListParticipante = em.merge(oldIdproyectoOfParticipanteListParticipante);
+                }
+            }
             //utx.commit();
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-                //utx.rollback();
+               // utx.rollback();
                 em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
@@ -90,7 +108,7 @@ public class ProyectoJpaController implements Serializable {
     public void edit(Proyecto proyecto) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-           // utx.begin();
+          //  utx.begin();
             em = getEntityManager();
             em.getTransaction().begin();
             Proyecto persistentProyecto = em.find(Proyecto.class, proyecto.getIdproyecto());
@@ -98,6 +116,8 @@ public class ProyectoJpaController implements Serializable {
             User managerNew = proyecto.getManager();
             List<Lista> listaListOld = persistentProyecto.getListaList();
             List<Lista> listaListNew = proyecto.getListaList();
+            List<Participante> participanteListOld = persistentProyecto.getParticipanteList();
+            List<Participante> participanteListNew = proyecto.getParticipanteList();
             List<String> illegalOrphanMessages = null;
             for (Lista listaListOldLista : listaListOld) {
                 if (!listaListNew.contains(listaListOldLista)) {
@@ -105,6 +125,14 @@ public class ProyectoJpaController implements Serializable {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain Lista " + listaListOldLista + " since its idproyecto field is not nullable.");
+                }
+            }
+            for (Participante participanteListOldParticipante : participanteListOld) {
+                if (!participanteListNew.contains(participanteListOldParticipante)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain Participante " + participanteListOldParticipante + " since its idproyecto field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -121,6 +149,13 @@ public class ProyectoJpaController implements Serializable {
             }
             listaListNew = attachedListaListNew;
             proyecto.setListaList(listaListNew);
+            List<Participante> attachedParticipanteListNew = new ArrayList<Participante>();
+            for (Participante participanteListNewParticipanteToAttach : participanteListNew) {
+                participanteListNewParticipanteToAttach = em.getReference(participanteListNewParticipanteToAttach.getClass(), participanteListNewParticipanteToAttach.getIdparticipante());
+                attachedParticipanteListNew.add(participanteListNewParticipanteToAttach);
+            }
+            participanteListNew = attachedParticipanteListNew;
+            proyecto.setParticipanteList(participanteListNew);
             proyecto = em.merge(proyecto);
             if (managerOld != null && !managerOld.equals(managerNew)) {
                 managerOld.getProyectoList().remove(proyecto);
@@ -141,11 +176,22 @@ public class ProyectoJpaController implements Serializable {
                     }
                 }
             }
-            //utx.commit();
+            for (Participante participanteListNewParticipante : participanteListNew) {
+                if (!participanteListOld.contains(participanteListNewParticipante)) {
+                    Proyecto oldIdproyectoOfParticipanteListNewParticipante = participanteListNewParticipante.getIdproyecto();
+                    participanteListNewParticipante.setIdproyecto(proyecto);
+                    participanteListNewParticipante = em.merge(participanteListNewParticipante);
+                    if (oldIdproyectoOfParticipanteListNewParticipante != null && !oldIdproyectoOfParticipanteListNewParticipante.equals(proyecto)) {
+                        oldIdproyectoOfParticipanteListNewParticipante.getParticipanteList().remove(participanteListNewParticipante);
+                        oldIdproyectoOfParticipanteListNewParticipante = em.merge(oldIdproyectoOfParticipanteListNewParticipante);
+                    }
+                }
+            }
+           // utx.commit();
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-               // utx.rollback();
+              //  utx.rollback();
                 em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
@@ -168,7 +214,7 @@ public class ProyectoJpaController implements Serializable {
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-           // utx.begin();
+          //  utx.begin();
             em = getEntityManager();
             em.getTransaction().begin();
             Proyecto proyecto;
@@ -186,6 +232,13 @@ public class ProyectoJpaController implements Serializable {
                 }
                 illegalOrphanMessages.add("This Proyecto (" + proyecto + ") cannot be destroyed since the Lista " + listaListOrphanCheckLista + " in its listaList field has a non-nullable idproyecto field.");
             }
+            List<Participante> participanteListOrphanCheck = proyecto.getParticipanteList();
+            for (Participante participanteListOrphanCheckParticipante : participanteListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Proyecto (" + proyecto + ") cannot be destroyed since the Participante " + participanteListOrphanCheckParticipante + " in its participanteList field has a non-nullable idproyecto field.");
+            }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
@@ -195,8 +248,8 @@ public class ProyectoJpaController implements Serializable {
                 manager = em.merge(manager);
             }
             em.remove(proyecto);
+          //  utx.commit();
             em.getTransaction().commit();
-            //utx.commit();
         } catch (Exception ex) {
             try {
                // utx.rollback();

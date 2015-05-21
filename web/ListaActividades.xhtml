@@ -1,0 +1,168 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Lista de Actividades</title>
+    </h:head>
+    <h:body>
+     <p:megaMenu  style="margin-top:20px">
+            <p:menuitem value="HOME" url="Principal.xhtml" icon="ui-icon-home" />
+            <p:menuitem value="Proyectos" icon="ui-icon-document" url="Proyectos.xhtml"/>
+            <p:menuitem value="Perfil" icon="ui-icon-pencil" url="Perfil.xhtml"/>
+            <p:menuitem value="Salir" url="index.xhtml" icon="ui-icon-close"/>
+     </p:megaMenu>
+        
+        
+    <h:form id="CrearListaForm">
+      
+          <p:dialog id="CrearListaDlg" widgetVar="CrearListaDialog" modal="true" header="Nueva Lista" showEffect="fade" hideEffect="fade">
+                
+              <h:panelGroup id="displayCrear">
+                  
+                    <p:panelGrid columns="2" >
+                        <h:outputText value="Ingrese Id del proyecto"/>
+                        <p:inputText value="#{listaActividadesBean.identi}" required="true"/>
+                        
+                        <h:outputText value="Nombre Lista"/>
+                        <p:inputText value="#{listaActividadesBean.lista.nameLista}" required="true"/>
+                        
+                        <h:outputText value="Observacion"/>
+                        <p:inputTextarea value="#{listaActividadesBean.lista.observationLista}" required="true"/>
+                                     
+                    </p:panelGrid>
+                  <p:commandButton actionListener="#{listaActividadesBean.crearLista}" value="Crear Lista" update=":ListaActividades:listaDatosActividades" oncomplete="PF('CrearListaDialog').hide()"/>
+                  <p:commandButton value="Cancelar" onclick="PF('CrearListaDialog').hide()"/>
+                </h:panelGroup>
+
+        </p:dialog>
+    </h:form>
+      
+        
+    <h:form id="VerListaForm">
+      <p:dialog id="VerListaDlg" widgetVar="VerListaDialog" modal="true" header="Detalles de la lista" showEffect="fade" hideEffect="fade">
+
+          <h:panelGroup id="displayVer">
+              <p:panelGrid columns="2" columnClasses="column" rendered="#{listaActividadesBean.lista != null}">
+
+                        <h:outputText value="Codigo"/>
+                        <h:outputText value="#{listaActividadesBean.lista.idlista}" title="Codigo"/>
+
+                        <h:outputText value="Nombre de la Lista"/>
+                        <h:outputText value="#{listaActividadesBean.lista.nameLista}" title="Nombre de la lista"/>
+
+                        <h:outputText value="Observaciones"/>
+                        <h:outputText value="#{listaActividadesBean.lista.observationLista}" title="Observaciones"/>
+
+                        <h:outputText value="Fecha de registro"/>
+                        <h:outputText value="#{listaActividadesBean.lista.registrationdateLista}" title="Fecha de registro"/>
+
+                        <h:outputText value="Fecha de actualizacion"/>
+                        <h:outputText value="#{listaActividadesBean.lista.updatedateLista}" title="Fecha de actualizacion"/>
+
+                        <h:outputText value="Proyecto viculado"/>
+                        <h:outputText value="#{listaActividadesBean.lista.idproyecto}" title="Proyecto vinculado"/>
+
+                    </p:panelGrid>
+                    <p:commandButton value="Cerrar" onclick="PF('VerListaDialog').hide()"/>
+                </h:panelGroup>
+         </p:dialog>
+       </h:form>
+     
+    <h:form id="EditarListaForm">
+
+        <p:dialog id="EditarListaDlg" widgetVar="EditarListaDialog" modal="true"
+                  header="EDITAR" showEffect="fade" hideEffect="fade">
+            
+              <p:panelGrid  columns="2" rendered="#{listaActividadesBean.lista != null}">
+                        
+                        <p:outputLabel value="Nombre de la lista"/>
+                        <p:inputText value="#{listaActividadesBean.lista.nameLista}"/>
+
+                        <p:outputLabel value="Observaciones"/>
+                        <p:inputTextarea value="#{listaActividadesBean.lista.observationLista}" />
+   
+                    </p:panelGrid>
+                <p:commandButton actionListener="#{listaActividadesBean.guardarLista}" value="Guardar" update=":ListaActividades:listaDatosActividades" oncomplete="PF('EditarListaDialog').hide()"/>
+                <p:commandButton value="Cancelar" onclick="PF('EditarListaDialog').hide()"/>
+          
+
+            </p:dialog>
+    </h:form>
+
+      
+      <h:form id="ListaActividades">
+        
+        <p:panel header="Listas de Actividades">
+            <p:contextMenu id="TablaListaContextMenu" for="listaDatosActividades">  
+                <p:menuitem value="Crear" onclick="document.getElementById('ListaActividades:crearButton').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="Ver" onclick="document.getElementById('ListaActividades:verButton').click();" icon="ui-icon-search"/>
+                <p:menuitem value="Editar" onclick="document.getElementById('ListaActividades:editarButton').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="Eliminar" onclick="document.getElementById('ListaActividades:eliminarButton').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="listaDatosActividades"
+                         value="#{listaActividadesBean.listActividades}"
+                         var="lista"
+                         rowKey="#{lista.idproyecto}"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{listaActividadesBean.lista}">
+
+                <p:ajax event="rowSelect"   update=":ListaActividades:crearButton :ListaActividades:verButton :ListaActividades:editarButton :ListaActividades:eliminarButton :ListaActividades:TablaListaContextMenu"/>
+                <p:ajax event="rowUnselect" update=":ListaActividades:crearButton :ListaActividades:verButton :ListaActividades:editarButton :ListaActividades:eliminarButton :ListaActividades:TablaListaContextMenu"/>
+                <p:ajax event="contextMenu" update=":ListaActividades:crearButton :ListaActividades:verButton :ListaActividades:editarButton :ListaActividades:eliminarButton"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('ListaActividades:verButton').click();"/>
+
+                <p:column sortBy="#{lista.idlista}" filterBy="#{lista.idlista}">
+                    <f:facet name="header">
+                        <h:outputText value="Codigo Lista"/>
+                    </f:facet>
+                    <h:outputText value="#{lista.idlista}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{lista.nameLista}" filterBy="#{lista.nameLista}">
+                    <f:facet name="header">
+                        <h:outputText value="Nombre de la Lista"/>
+                    </f:facet>
+                    <h:outputText value="#{lista.nameLista}"/>
+                </p:column>
+                
+                <p:column sortBy="#{lista.observationLista}" filterBy="#{lista.observationLista}">
+                    <f:facet name="header">
+                        <h:outputText value="Observaciones"/>
+                    </f:facet>
+                    <h:outputText value="#{lista.observationLista}"/>
+                </p:column>
+                
+            </p:dataTable>
+
+        </p:panel>
+          
+          <p:commandButton id="crearButton" icon="ui-icon-plus"   value="Crear Lista de actividades"  update=":CrearListaForm" oncomplete="PF('CrearListaDialog').show()"  actionListener="#{listaActividadesBean.nuevaLista}"/>
+          <p:commandButton id="verButton"   style="visibility: hidden;" icon="ui-icon-search" value="Ver" update=":VerListaForm" oncomplete="PF('VerListaDialog').show()" disabled="#{empty listaActividadesBean.lista}"/>
+          <p:commandButton id="editarButton"   style="visibility: hidden;" icon="ui-icon-pencil" value="Editar" update=":EditarListaForm" oncomplete="PF('EditarListaDialog').show()" disabled="#{empty listaActividadesBean.lista}"/>
+          
+          <p:commandButton id="eliminarButton" style="visibility: hidden;" icon="ui-icon-trash"  value="Eliminar" actionListener="#{listaActividadesBean.eliminarLista}" update=":ListaActividades:listaDatosActividades" disabled="#{empty listaActividadesBean.lista}">
+              <p:confirm header="Confirmacion" message="Esta seguro de realizar esta accion?" icon="ui-icon-alert"/>
+          </p:commandButton>
+          
+          <p:commandButton id="VerActividades"  icon="ui-icon-pencil" value="Ver Actividades" action="Actividades?faces-redirect=true"/>
+          
+       
+          <p:confirmDialog global="true">  
+              <p:commandButton value="si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+              <p:commandButton value="no" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+          </p:confirmDialog>
+      
+      </h:form>
+        
+        
+        
+    </h:body>
+</html>
+
