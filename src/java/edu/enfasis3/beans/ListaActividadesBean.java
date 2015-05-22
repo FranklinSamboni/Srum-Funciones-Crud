@@ -9,6 +9,7 @@ import edu.enfasis3.entity.Lista;
 import edu.enfasis3.entity.ListaJpaController;
 import edu.enfasis3.entity.Proyecto;
 import edu.enfasis3.entity.ProyectoJpaController;
+import edu.enfasis3.entity.User;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -33,11 +34,21 @@ public class ListaActividadesBean {
     private Lista lista;
     private List<Lista> listActividades;
     private Proyecto proyectolista;
+    private Integer seleccionProyecto;
     private Integer identi;
   
     public ListaActividadesBean() {
     }
 
+    public Integer getSeleccionProyecto() {
+        return seleccionProyecto;
+    }
+
+    public void setSeleccionProyecto(Integer seleccionProyecto) {
+        this.seleccionProyecto = seleccionProyecto;
+    }
+
+    
     public Integer getIdenti() {
         return identi;
     }
@@ -63,11 +74,19 @@ public class ListaActividadesBean {
     }
 
     public List<Lista> getListActividades() {
+        
+       // FacesContext context = FacesContext.getCurrentInstance();
+      //  User user = ((SessionBean)(context.getApplication().evaluateExpressionGet(
+        //            context, "#{sessionBean}", Object.class))).getUser();
+        
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
         EntityManager em = emf.createEntityManager();
-        //ProyectoJpaController pjc = new ProyectoJpaController(emf);
         
-        Query q = em.createNamedQuery("Lista.findAll");
+        //Query q = em.createNamedQuery("Lista.findByProyectoLista");
+        //q.setParameter("iduser",user.getIduser());
+        Query q = em.createNamedQuery("Lista.findByProyectos");
+        q.setParameter("idproyecto",seleccionProyecto);
+        
         listActividades = q.getResultList(); 
         return listActividades;
     }
@@ -92,7 +111,7 @@ public class ListaActividadesBean {
         ListaJpaController ljc = new ListaJpaController(emf);
         
         ProyectoJpaController pjc = new ProyectoJpaController(emf);
-        proyectolista=pjc.findProyecto(identi);
+        proyectolista=pjc.findProyecto(seleccionProyecto);
         
         try {
             
@@ -139,26 +158,17 @@ public class ListaActividadesBean {
         }
     
     }
+   
+    public void actualizarTabla(){
     
-    /* public String comprobacion(){
+        if(seleccionProyecto != null){
+            System.out.println("SE HA SELECCIONADO UN PROYECTO");
+        }
+        else {
+            System.out.println("NO PROYECTO");
+            }
+        
     
-            FacesContext context = FacesContext.getCurrentInstance();
-            Proyecto pro = ((ListaProyectoBean)(context.getApplication().evaluateExpressionGet(
-                    context, "#{listaProyectoBean}", Object.class))).getSeleccion();
-            
-            if(pro !=null){
-                
-            EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
-            ProyectoJpaController pjc = new ProyectoJpaController(emf);
-            
-            proyectolista=new Proyecto();
-            proyectolista= pjc.findProyecto(pro.getIdproyecto());
-            
-            return "ListaActividades"+"?faces-redirect=true";
-            
-            }
-            else {
-            return "Proyectos";
-            }
-         }*/
+    }
+    
 }

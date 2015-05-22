@@ -10,6 +10,7 @@ import edu.enfasis3.entity.Proyecto;
 import edu.enfasis3.entity.ProyectoJpaController;
 import edu.enfasis3.entity.User;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import java.util.Date;
@@ -30,13 +31,13 @@ import javax.persistence.Query;
  */
 @ManagedBean
 @ViewScoped
-public class ListaProyectoBean implements Serializable  {
+public class ListaProyectoBean {
 
     /**
      * Creates a new instance of ListaProyectoBean
      */
     private Proyecto seleccion ;
-    private Proyecto proyecto;
+    private List proyectoNombres;
     private List<Proyecto> list;
     private Integer idproyecto=2;
     
@@ -45,6 +46,40 @@ public class ListaProyectoBean implements Serializable  {
     public ListaProyectoBean() {
     }
 
+    public List<String> getProyectoNombres() {
+        
+        proyectoNombres = new ArrayList<>();
+        int element;
+        Proyecto pro;
+        
+        FacesContext context = FacesContext.getCurrentInstance();
+        User usuario = ((SessionBean)(context.getApplication().evaluateExpressionGet(
+                    context, "#{sessionBean}", Object.class))).getUser();
+       
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
+        EntityManager em = emf.createEntityManager();
+        
+        Query q = em.createNamedQuery("Proyecto.findByAllproyectoUser");
+        q.setParameter("iduser", usuario.getIduser());
+        list = q.getResultList();
+        
+        element = list.size();
+        
+        for (int i=0; i<element ;i++){
+            
+            pro=list.get(i);
+            proyectoNombres.add(i, pro.getIdproyecto());
+        }
+        
+        
+        return proyectoNombres;
+    }
+
+    public void setProyectoNombres(List<String> proyectoNombres) {
+        this.proyectoNombres = proyectoNombres;
+    }
+
+       
     public Proyecto getSeleccion() {
         return seleccion;
     }
@@ -64,14 +99,17 @@ public class ListaProyectoBean implements Serializable  {
     
     
     public List<Proyecto> getList() {
+        
+        FacesContext context = FacesContext.getCurrentInstance();
+        User usuario = ((SessionBean)(context.getApplication().evaluateExpressionGet(
+                    context, "#{sessionBean}", Object.class))).getUser();
        
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
         EntityManager em = emf.createEntityManager();
-        Query q = em.createNamedQuery("Proyecto.findAll");
+        
+        Query q = em.createNamedQuery("Proyecto.findByAllproyectoUser");
+        q.setParameter("iduser", usuario.getIduser());
         list = q.getResultList();
-        //FacesContext context = FacesContext.getCurrentInstance();
-       // User usuario = ((SessionBean)(context.getApplication().evaluateExpressionGet(
-       //             context, "#{sessionBean}", Object.class))).getUser();
         
         //list = usuario.getProyectoList();
         return list;
@@ -84,44 +122,9 @@ public class ListaProyectoBean implements Serializable  {
         
     
     }
-    
  
     public void setList(List<Proyecto> list) {
         this.list = list;
-    }
-
-    public Proyecto getProyecto() {
-        return proyecto;
-    }
-
-    public void setProyecto(Proyecto proyecto) {
-        this.proyecto = proyecto;
-    }
-    
-    
-    public String comprobacion (){
-       
-        if (seleccion!=null){
-           proyecto=seleccion;
-             /*
-            proyecto.setBegindateProyecto(seleccion.getBegindateProyecto());
-            proyecto.setDescriptionProyecto(seleccion.getDescriptionProyecto());
-            proyecto.setEnddateProyecto(seleccion.getEnddateProyecto());
-            proyecto.setIdproyecto(seleccion.getIdproyecto());
-            proyecto.setListaList(seleccion.getListaList());
-            proyecto.setManager(seleccion.getManager());
-            proyecto.setNameProyecto(seleccion.getNameProyecto());
-            proyecto.setParticipanteList(seleccion.getParticipanteList());
-            proyecto.setRegistrationdateProyecto(seleccion.getRegistrationdateProyecto());
-            proyecto.setUpdatedateProyecto(seleccion.getUpdatedateProyecto());
-            */
-        System.out.println("DETALLES DEL PROYECTO : "+ proyecto.getNameProyecto());
-        return "ListaActividades"+"?faces-redirect=true";
-        }
-        else{
-        return "Proyectos";
-        }
-    
     }
     
     public void nuevoProyecto(){
@@ -188,5 +191,5 @@ public class ListaProyectoBean implements Serializable  {
         
     }
     
-}
+  }
   

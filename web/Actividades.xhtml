@@ -8,12 +8,14 @@
         <title>Actividades</title>
     </h:head>
     <h:body>
-        <p:megaMenu  style="margin-top:20px">
-            <p:menuitem value="HOME" url="Principal.xhtml" icon="ui-icon-home" />
-            <p:menuitem value="Proyectos" icon="ui-icon-document" url="Proyectos.xhtml"/>
-            <p:menuitem value="Perfil" icon="ui-icon-pencil" url="Perfil.xhtml"/>
-            <p:menuitem value="Salir" url="index.xhtml" icon="ui-icon-close"/>
-        </p:megaMenu>
+       <p:megaMenu  style="margin-top:20px">
+        <p:menuitem value="HOME" url="Principal.xhtml" icon="ui-icon-home" />
+        <p:menuitem value="Proyectos" icon="ui-icon-document" url="Proyectos.xhtml"/>
+        <p:menuitem value="Lista de Actividades" icon="ui-icon-search" url="ListaActividades.xhtml"/>
+        <p:menuitem value="Actividades" icon="ui-icon-trash" url="Actividades.xhtml"/>
+        <p:menuitem value="Perfil" icon="ui-icon-pencil" url="Perfil.xhtml"/>
+        <p:menuitem value="Salir" url="index.xhtml" icon="ui-icon-close"/>
+       </p:megaMenu>
         
              
     <h:form id="CrearActividadForm">
@@ -23,9 +25,7 @@
               <h:panelGroup id="displayCrear">
                   
                     <p:panelGrid columns="2" >
-                        <h:outputText value="Ingrese Id Lista"/>
-                        <p:inputText value="#{actividadBean.identificador}" required="true"/>
-                        
+                       
                         <h:outputText value="Nombre Actividad"/>
                         <p:inputText value="#{actividadBean.actividad.nameActividad}" required="true"/>
                         
@@ -108,6 +108,30 @@
 
             </p:dialog>
     </h:form>
+        
+        <h:form id="seleccionar">
+            
+     <p:panel header="Seleccione Proyecto" style="margin-bottom:10px;">
+        <h:panelGrid columns="2" cellpadding="5">
+            <p:outputLabel for="proyecto" value="Proyecto:  " />
+            <p:selectOneMenu id="proyecto" value="#{listaActividadesBean.seleccionProyecto}" style="width:150px">
+                <p:ajax listener="#{actividadBean.obtenerIdProyecto}" update=":seleccionar:listaActividad"/>
+                <f:selectItem itemLabel="Seleccione proyecto" itemValue="" noSelectionOption="true" />
+                <f:selectItems value="#{listaProyectoBean.proyectoNombres}" />
+            </p:selectOneMenu>
+            
+            <p:outputLabel for="listaActividad" value="Seleccione Actividad" />
+            <p:selectOneMenu id="listaActividad" value="#{actividadBean.seleccionListaActividades}" style="width:150px">
+                <p:ajax update=":Actividad:DatosActividad"/>
+                <f:selectItem itemLabel="Seleccione Actividad" itemValue="" noSelectionOption="true" />
+                <f:selectItems value="#{actividadBean.listaActivi}" />
+            </p:selectOneMenu>
+         
+       </h:panelGrid>
+     </p:panel>
+            
+    </h:form>
+    
         
     <h:form id="Actividad">
         

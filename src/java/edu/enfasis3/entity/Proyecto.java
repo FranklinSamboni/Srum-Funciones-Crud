@@ -37,6 +37,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Proyecto.findAll", query = "SELECT p FROM Proyecto p"),
+ // @NamedQuery(name = "Lista.findByIdUser", query = "SELECT l FROM Lista l JOIN l.idproyecto AS p JOIN p.manager AS m WHERE m.iduser = :idUser"),
+    @NamedQuery(name = "Proyecto.findByAllproyectoUser", query = "SELECT p FROM Proyecto p JOIN p.manager AS u WHERE u.iduser = :iduser"),
+    
     @NamedQuery(name = "Proyecto.findByIdproyecto", query = "SELECT p FROM Proyecto p WHERE p.idproyecto = :idproyecto"),
     @NamedQuery(name = "Proyecto.findByNameProyecto", query = "SELECT p FROM Proyecto p WHERE p.nameProyecto = :nameProyecto"),
     @NamedQuery(name = "Proyecto.findByDescriptionProyecto", query = "SELECT p FROM Proyecto p WHERE p.descriptionProyecto = :descriptionProyecto"),

@@ -8,14 +8,16 @@
         <title>Lista de Actividades</title>
     </h:head>
     <h:body>
-     <p:megaMenu  style="margin-top:20px">
-            <p:menuitem value="HOME" url="Principal.xhtml" icon="ui-icon-home" />
-            <p:menuitem value="Proyectos" icon="ui-icon-document" url="Proyectos.xhtml"/>
-            <p:menuitem value="Perfil" icon="ui-icon-pencil" url="Perfil.xhtml"/>
-            <p:menuitem value="Salir" url="index.xhtml" icon="ui-icon-close"/>
+    <p:megaMenu  style="margin-top:20px">
+        <p:menuitem value="HOME" url="Principal.xhtml" icon="ui-icon-home" />
+        <p:menuitem value="Proyectos" icon="ui-icon-document" url="Proyectos.xhtml"/>
+        <p:menuitem value="Lista de Actividades" icon="ui-icon-search" url="ListaActividades.xhtml"/>
+        <p:menuitem value="Actividades" icon="ui-icon-trash" url="Actividades.xhtml"/>
+        <p:menuitem value="Perfil" icon="ui-icon-pencil" url="Perfil.xhtml"/>
+        <p:menuitem value="Salir" url="index.xhtml" icon="ui-icon-close"/>
+        
      </p:megaMenu>
-        
-        
+                
     <h:form id="CrearListaForm">
       
           <p:dialog id="CrearListaDlg" widgetVar="CrearListaDialog" modal="true" header="Nueva Lista" showEffect="fade" hideEffect="fade">
@@ -23,8 +25,7 @@
               <h:panelGroup id="displayCrear">
                   
                     <p:panelGrid columns="2" >
-                        <h:outputText value="Ingrese Id del proyecto"/>
-                        <p:inputText value="#{listaActividadesBean.identi}" required="true"/>
+                        
                         
                         <h:outputText value="Nombre Lista"/>
                         <p:inputText value="#{listaActividadesBean.lista.nameLista}" required="true"/>
@@ -92,7 +93,23 @@
             </p:dialog>
     </h:form>
 
-      
+    <h:form>
+            
+     <p:panel header="Seleccione Proyecto" style="margin-bottom:10px;">
+        <h:panelGrid columns="2" cellpadding="5">
+            <p:outputLabel for="proyecto" value="Proyecto:  " />
+            <p:selectOneMenu id="proyecto" value="#{listaActividadesBean.seleccionProyecto}" style="width:150px">
+                <p:ajax listener="#{listaActividadesBean.actualizarTabla}" update=":ListaActividades:listaDatosActividades"/>
+                <f:selectItem itemLabel="Seleccione proyecto" itemValue="" noSelectionOption="true" />
+                <f:selectItems value="#{listaProyectoBean.proyectoNombres}" />
+            </p:selectOneMenu>
+         
+       </h:panelGrid>
+     </p:panel>
+            
+    </h:form>
+        
+        
       <h:form id="ListaActividades">
         
         <p:panel header="Listas de Actividades">
@@ -151,7 +168,6 @@
               <p:confirm header="Confirmacion" message="Esta seguro de realizar esta accion?" icon="ui-icon-alert"/>
           </p:commandButton>
           
-          <p:commandButton id="VerActividades"  icon="ui-icon-pencil" value="Ver Actividades" action="Actividades?faces-redirect=true"/>
           
        
           <p:confirmDialog global="true">  

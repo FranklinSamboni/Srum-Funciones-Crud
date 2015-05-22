@@ -9,11 +9,13 @@ import edu.enfasis3.entity.Actividad;
 import edu.enfasis3.entity.ActividadJpaController;
 import edu.enfasis3.entity.Comentario;
 import edu.enfasis3.entity.ComentarioJpaController;
+import edu.enfasis3.entity.User;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -63,9 +65,15 @@ public class ComentarioBean {
 
     public List<Comentario> getListaComentario() {
         
+        FacesContext context = FacesContext.getCurrentInstance();
+        User usuario = ((SessionBean)(context.getApplication().evaluateExpressionGet(
+                    context, "#{sessionBean}", Object.class))).getUser();
+       
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
         EntityManager em = emf.createEntityManager();
-        Query q = em.createNamedQuery("Comentario.findAll");
+        
+        Query q = em.createNamedQuery("Comentario.findByComentario");
+        q.setParameter("iduser", usuario.getIduser());
         
         listaComentario = q.getResultList();
         

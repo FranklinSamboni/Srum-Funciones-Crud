@@ -9,12 +9,15 @@ import edu.enfasis3.entity.Actividad;
 import edu.enfasis3.entity.ActividadJpaController;
 import edu.enfasis3.entity.Lista;
 import edu.enfasis3.entity.ListaJpaController;
+import edu.enfasis3.entity.User;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -33,10 +36,51 @@ public class ActividadBean {
     private List<Actividad> listaActividad;
     private Lista lista;
     private Integer identificador;
+    private Integer proyectoSeleccionado;
+    private Integer seleccionListaActividades;
+    private List listaAct;
+    private List listaActivi;
+    
     
     public ActividadBean() {
     }
 
+    public List getListaActivi() {
+        return listaActivi;
+    }
+
+    public void setListaActivi(List listaActivi) {
+        this.listaActivi = listaActivi;
+    }
+    
+
+    public List getListaAct() {
+        return listaAct;
+    }
+
+    public void setListaAct(List listaAct) {
+        this.listaAct = listaAct;
+    }
+
+    
+    
+    public Integer getSeleccionListaActividades() {
+        return seleccionListaActividades;
+    }
+
+    public void setSeleccionListaActividades(Integer seleccionListaActividades) {
+        this.seleccionListaActividades = seleccionListaActividades;
+    }
+    
+    public Integer getProyectoSeleccionado() {
+        return proyectoSeleccionado;
+    }
+
+    public void setProyectoSeleccionado(Integer proyectoSeleccionado) {
+        this.proyectoSeleccionado = proyectoSeleccionado;
+    }
+    
+    
     public Actividad getActividad() {
         return actividad;
     }
@@ -47,9 +91,12 @@ public class ActividadBean {
 
     public List<Actividad> getListaActividad() {
         
+       
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
         EntityManager em = emf.createEntityManager();
-        Query q = em.createNamedQuery("Actividad.findAll");
+        
+        Query q = em.createNamedQuery("Actividad.findByActividadLista");
+        q.setParameter("idlista", seleccionListaActividades);
         
         listaActividad = q.getResultList();
         
@@ -93,7 +140,7 @@ public class ActividadBean {
         ActividadJpaController ajc = new ActividadJpaController(emf);
         
         ListaJpaController ljc = new ListaJpaController(emf);
-        lista = ljc.findLista(identificador);
+        lista = ljc.findLista(seleccionListaActividades);
         
         try{
             actividad.setIdlista(lista);
@@ -137,6 +184,31 @@ public class ActividadBean {
     
     
         }
+    
+    public void obtenerIdProyecto(){
+    
+        int elem;
+        Lista listaAc;
+        listaActivi = new ArrayList<>();
+        FacesContext context = FacesContext.getCurrentInstance();
+        proyectoSeleccionado = ((ListaActividadesBean)(context.getApplication().evaluateExpressionGet(
+                    context, "#{listaActividadesBean}", Object.class))).getSeleccionProyecto();
+        
+        listaAct = ((ListaActividadesBean)(context.getApplication().evaluateExpressionGet(
+                    context, "#{listaActividadesBean}", Object.class))).getListActividades();
+        
+        elem = listaAct.size();
+        
+        for (int i=0; i<elem ;i++){
+            
+            listaAc =(Lista) listaAct.get(i);
+            
+            listaActivi.add(i, listaAc.getIdlista());
+        }
+        
+        
+        
+    }
     
     
 }

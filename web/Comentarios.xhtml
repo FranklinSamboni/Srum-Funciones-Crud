@@ -7,14 +7,16 @@
     <h:head>
         <title>Comentarios</title>
     </h:head>
+    
     <h:body>
-       <p:megaMenu  style="margin-top:20px">
+     <p:megaMenu  style="margin-top:20px">
         <p:menuitem value="HOME" url="Principal.xhtml" icon="ui-icon-home" />
         <p:menuitem value="Proyectos" icon="ui-icon-document" url="Proyectos.xhtml"/>
+        <p:menuitem value="Lista de Actividades" icon="ui-icon-search" url="ListaActividades.xhtml"/>
+        <p:menuitem value="Actividades" icon="ui-icon-trash" url="ListaActividades.xhtml"/>
         <p:menuitem value="Perfil" icon="ui-icon-pencil" url="Perfil.xhtml"/>
         <p:menuitem value="Salir" url="index.xhtml" icon="ui-icon-close"/>
-       </p:megaMenu>
-        
+     </p:megaMenu>
                  
     <h:form id="CrearComentarioForm">
       
@@ -145,8 +147,6 @@
           <p:commandButton id="eliminarButton" style="visibility: hidden;" icon="ui-icon-trash"  value="Eliminar" actionListener="#{comentarioBean.eliminarComentario}" update=":Comentario:DatosComentario" disabled="#{empty comentarioBean.comentario}">
               <p:confirm header="Confirmacion" message="Esta seguro de realizar esta accion?" icon="ui-icon-alert"/>
           </p:commandButton>
-          
-          <p:commandButton id="VerComentarios"  icon="ui-icon-pencil" value="Ver Comentarios" action="Comentarios?faces-redirect=true"/>
           
        
           <p:confirmDialog global="true">  

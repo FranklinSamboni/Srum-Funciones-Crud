@@ -103,8 +103,8 @@ public class RegistrarBean {
         
         user.setPassword(contraseña);
         
-//        EnviarCorreoScrum send = new EnviarCorreoScrum(user.getEmail(),user.getPassword());
-  //      send.enviarCorreo();
+        EnviarCorreoScrum send = new EnviarCorreoScrum(user.getEmail(),user.getPassword());
+        send.enviarCorreo();
         
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
         UserJpaController pjc = new UserJpaController(emf);
