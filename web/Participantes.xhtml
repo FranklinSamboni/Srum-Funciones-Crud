@@ -1,0 +1,185 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+     <LINK href="css/animatePerfil.css" rel="stylesheet" type="text/css"></LINK>
+    <link href='http://fonts.googleapis.com/css?family=Shadows Into Light' rel='stylesheet' type='text/css'></link>
+     <link href='http://fonts.googleapis.com/css?family=Lobster|Muli|Oswald:700' rel='stylesheet' type='text/css'></link>
+    
+    <c:if test="#{sessionBean.validation}" >
+        
+    <h:head>
+        <title>Participantes</title>
+    </h:head>
+   <body background="fotos\fondo.jpg">
+        
+    <h:form id="form1" class="option animated bounceInRight">
+       <p:megaMenu>
+        <p:menuitem value="HOME" url="Principal.xhtml" icon="ui-icon-home" />
+        <p:menuitem value="Participantes" url="Participantes.xhtml" />
+        
+        <p:menuitem value="Proyectos" icon="ui-icon-document" url="Proyectos.xhtml"/>
+        <p:menuitem value="Lista de Actividades" icon="ui-icon-search" url="ListaActividades.xhtml"/>
+        <p:menuitem value="Actividades" icon="ui-icon-trash" url="Actividades.xhtml"/>
+        <p:menuitem value="Perfil" icon="ui-icon-pencil" url="Perfil.xhtml"/>
+        <p:menuitem value="Salir" action="#{sessionBean.logout}" icon="ui-icon-close"/>
+        </p:megaMenu>
+        </h:form>
+       
+       
+    <h:form id="CrearParticipanteForm">
+      
+          <p:dialog id="CrearParticipanteDlg" widgetVar="CrearParticipanteDialog" modal="true" header="Nueva Participante" showEffect="fade" hideEffect="fade">
+                
+              <h:panelGroup id="displayCrear">
+                  
+                    <p:panelGrid columns="2" >
+                        
+                        
+                        <h:outputText value="Id user"/>
+                        <p:inputText value="#{participanteBean.iduser}" required="true"/>
+                        
+                        <h:outputText value="Id Proyecto"/>
+                        <p:inputTextarea value="#{participanteBean.idproyecto}" required="true"/>
+                                     
+                    </p:panelGrid>
+                  <p:commandButton actionListener="#{participanteBean.crearParticipante}" value="Crear Participante" update=":ListaParticipante:listaDatosParticipante" oncomplete="PF('CrearParticipanteDialog').hide()"/>
+                  <p:commandButton value="Cancelar" onclick="PF('CrearParticipanteDialog').hide()"/>
+                </h:panelGroup>
+
+        </p:dialog>
+    </h:form>
+      
+        
+    <h:form id="VerParticipanteForm">
+      <p:dialog id="VerParticipanteDlg" widgetVar="VerParticipanteDialog" modal="true" header="Detalles de la Participante" showEffect="fade" hideEffect="fade">
+
+          <h:panelGroup id="displayVer">
+              <p:panelGrid columns="2" columnClasses="column" rendered="#{participanteBean.participanteSele != null}">
+
+                        <h:outputText value="User"/>
+                        <h:outputText value="#{participanteBean.participanteSele.iduser}" title="Codigo"/>
+
+                        <h:outputText value="proyecto"/>
+                        <h:outputText value="#{participanteBean.participanteSele.iduser}" title="Nombre de la Participante"/>
+
+                    </p:panelGrid>
+                    <p:commandButton value="Cerrar" onclick="PF('VerParticipanteDialog').hide()"/>
+                </h:panelGroup>
+         </p:dialog>
+       </h:form>
+     
+    <h:form id="EditarParticipanteForm">
+
+        <p:dialog id="EditarParticipanteDlg" widgetVar="EditarParticipanteDialog" modal="true"
+                  header="EDITAR" showEffect="fade" hideEffect="fade">
+            
+            <p:panelGrid  columns="2" rendered="#{participanteBean.participanteSele != null}">
+                        
+                        <p:outputLabel value="iduser"/>
+                        <p:inputText value="#{participanteBean.participanteSele.iduser.iduser}"/>
+
+                        <p:outputLabel value="idproyecto"/>
+                        <p:inputTextarea value="#{participanteBean.participanteSele.idproyecto.idproyecto}" />
+   
+            </p:panelGrid>
+            <p:commandButton actionListener="#{participanteBean.guardarParticipante}" value="Guardar" update=":ListaParticipante:listaDatosParticipante" oncomplete="PF('EditarParticipanteDialog').hide()"/>
+                <p:commandButton value="Cancelar" onclick="PF('EditarParticipanteDialog').hide()"/>
+          
+
+            </p:dialog>
+    </h:form>
+
+    <h:form class="option animated bounceInRight">
+            
+     <p:panel header="Seleccione Proyecto" style="margin-bottom:10px;">
+        <h:panelGrid columns="2" cellpadding="5">
+            <p:outputLabel for="proyecto" value="Proyecto:  " />
+            <p:selectOneMenu id="proyecto" value="#{participanteBean.idProyectoSeleccion}" style="width:150px">
+                <p:ajax listener="#{listaActividadesBean.actualizarTabla}" update=":ListaParticipante:listaDatosParticipante"/>
+                <f:selectItem itemLabel="Seleccione proyecto" itemValue="" noSelectionOption="true" />
+                <f:selectItems value="#{listaProyectoBean.proyectoNombres}" />
+            </p:selectOneMenu>
+         
+       </h:panelGrid>
+     </p:panel>
+            
+    </h:form>
+        
+        
+      <h:form id="ListaParticipante" class="option animated bounceInUp">
+        
+        <p:panel header="Listas de Participante">
+            <p:contextMenu id="TablaParticipanteContextMenu" for="listaDatosParticipante">  
+                <p:menuitem value="Crear" onclick="document.getElementById('ListaParticipante:crearButton').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="Ver" onclick="document.getElementById('ListaParticipante:verButton').click();" icon="ui-icon-search"/>
+                <p:menuitem value="Editar" onclick="document.getElementById('ListaParticipante:editarButton').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="Eliminar" onclick="document.getElementById('ListaParticipante:eliminarButton').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="listaDatosParticipante"
+                         value="#{participanteBean.participantes}"
+                         var="parti"
+                         rowKey="#{parti.idparticipante}"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{participanteBean.participanteSele}">
+
+                <p:ajax event="rowSelect"   update=":ListaParticipante:crearButton :ListaParticipante:verButton :ListaParticipante:editarButton :ListaParticipante:eliminarButton :ListaParticipante:TablaParticipanteContextMenu"/>
+                <p:ajax event="rowUnselect" update=":ListaParticipante:crearButton :ListaParticipante:verButton :ListaParticipante:editarButton :ListaParticipante:eliminarButton :ListaParticipante:TablaParticipanteContextMenu"/>
+                <p:ajax event="contextMenu" update=":ListaParticipante:crearButton :ListaParticipante:verButton :ListaParticipante:editarButton :ListaParticipante:eliminarButton"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('ListaParticipante:verButton').click();"/>
+
+                <p:column sortBy="#{parti.idparticipante}" filterBy="#{parti.idparticipante}">
+                    <f:facet name="header">
+                        <h:outputText value="Codigo participante"/>
+                    </f:facet>
+                    <h:outputText value="#{parti.idparticipante}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{parti.iduser}" filterBy="#{parti.iduser}">
+                    <f:facet name="header">
+                        <h:outputText value="codigo participante"/>
+                    </f:facet>
+                    <h:outputText value="#{parti.iduser}"/>
+                </p:column>
+                
+                <p:column sortBy="#{parti.idproyecto}" filterBy="#{parti.idproyecto}">
+                    <f:facet name="header">
+                        <h:outputText value="id proyecto"/>
+                    </f:facet>
+                    <h:outputText value="#{parti.idproyecto}"/>
+                </p:column>
+                
+            </p:dataTable>
+
+        </p:panel>
+          
+          <p:commandButton id="crearButton" icon="ui-icon-plus"   value="Crear Lista de Participante"  update=":CrearParticipanteForm" oncomplete="PF('CrearParticipanteDialog').show()"  actionListener="#{participanteBean.nuevoParticipante}"/>
+          <p:commandButton id="verButton"   style="visibility: hidden;" icon="ui-icon-search" value="Ver" update=":VerParticipanteForm" oncomplete="PF('VerParticipanteDialog').show()" disabled="#{empty participanteBean.participanteSele}"/>
+          <p:commandButton id="editarButton"   style="visibility: hidden;" icon="ui-icon-pencil" value="Editar" update=":EditarParticipanteForm" oncomplete="PF('EditarParticipanteDialog').show()" disabled="#{empty participanteBean.participanteSele}"/>
+          
+          <p:commandButton id="eliminarButton" style="visibility: hidden;" icon="ui-icon-trash"  value="Eliminar" actionListener="#{participanteBean.eliminarParticipante}" update=":ListaParticipante:listaDatosParticipante" disabled="#{empty participanteBean.participanteSele}">
+              <p:confirm header="Confirmacion" message="Esta seguro de realizar esta accion?" icon="ui-icon-alert"/>
+          </p:commandButton>
+          
+          
+       
+          <p:confirmDialog global="true">  
+              <p:commandButton value="si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+              <p:commandButton value="no" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+          </p:confirmDialog>
+      
+      </h:form>
+        
+        
+    </body>
+        
+    </c:if>
+</html>
+

@@ -4,7 +4,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-      <LINK href="animate.css" rel="stylesheet" type="text/css"></LINK>
+      <LINK href="css/animate.css" rel="stylesheet" type="text/css"></LINK>
     <link href='http://fonts.googleapis.com/css?family=Indie Flower:400,700' rel='stylesheet' type='text/css'></link>
     <link href='http://fonts.googleapis.com/css?family=Lobster|Muli|Oswald:700' rel='stylesheet' type='text/css'></link>
     <link href='http://fonts.googleapis.com/css?family=Shadows Into Light' rel='stylesheet' type='text/css'></link>
@@ -12,12 +12,13 @@
     <h:head>
         <title><h:outputText value="Registro de Usuario"/></title>
     </h:head>
-    <h:body>
-        <h1 class="option animated swing" style="top: 20px;  position: absolute; left: 585px"><h:outputText value="REGISTRO" style="font-style: italic;  color: blueviolet"/></h1>
-        <h:form id="show" style="top: 200px; position: relative; left:470px">
+    <body background="fotos\fondo.jpg">
+        <h1 class="option animated swing"><h:outputText value="REGISTRO" /></h1>
+     
+        <h:form id="show" style="top: 0px; position: relative; left:470px">
        
             
-            <h:panelGrid id="grid" columns="3" cellpadding="5" style="font-family: cursive" class="option animated flipInX" >
+            <h:panelGrid id="grid" columns="3" cellpadding="5"  class="option animated flipInX" >
       
                 <p:outputLabel for="nombre" value="Nombre :" />
                 <p:inputText id="nombre" required="true" value="#{registrarBean.nombre}" requiredMessage="Complete Nombre"
@@ -80,6 +81,6 @@
             </p:outputPanel>
         </p:dialog>          
     </h:form>
-    </h:body>
+    </body>
 </html>
 

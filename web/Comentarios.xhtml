@@ -5,15 +5,22 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <LINK href="css/animatePerfil.css" rel="stylesheet" type="text/css"></LINK>
+    <link href='http://fonts.googleapis.com/css?family=Indie Flower:400,700' rel='stylesheet' type='text/css'></link>
+    <link href='http://fonts.googleapis.com/css?family=Lobster|Muli|Oswald:700' rel='stylesheet' type='text/css'></link>
+     <link href='http://fonts.googleapis.com/css?family=Shadows Into Light' rel='stylesheet' type='text/css'></link>
+    
     <c:if test="#{sessionBean.validation}" >
     <h:head>
         <title>Comentarios</title>
     </h:head>
     
-    <h:body>
-     <h:form>
+   <body background="fotos\fondo.jpg">
+     <h:form id="form1">
        <p:megaMenu>
         <p:menuitem value="HOME" url="Principal.xhtml" icon="ui-icon-home" />
+        <p:menuitem value="Participantes" url="Participantes.xhtml" />
+        
         <p:menuitem value="Proyectos" icon="ui-icon-document" url="Proyectos.xhtml"/>
         <p:menuitem value="Lista de Actividades" icon="ui-icon-search" url="ListaActividades.xhtml"/>
         <p:menuitem value="Actividades" icon="ui-icon-trash" url="Actividades.xhtml"/>
@@ -102,21 +109,21 @@
             <p:selectOneMenu id="proyecto" value="#{listaActividadesBean.seleccionProyecto}" style="width:150px">
                 <p:ajax listener="#{actividadBean.obtenerIdProyecto}" update=":seleccionar:listaActividad"/>
                 <f:selectItem itemLabel="Seleccione proyecto" itemValue="" noSelectionOption="true" />
-                <f:selectItems value="#{listaProyectoBean.proyectoNombres}" />
+                <f:selectItems value="#{listaProyectoBean.list}" var="pro" itemLabel="#{pro.nameProyecto}"  itemValue="#{pro.idproyecto}"/>
             </p:selectOneMenu>
             
             <p:outputLabel for="listaActividad" value="Seleccione Listas Actividades" />
             <p:selectOneMenu id="listaActividad" value="#{actividadBean.seleccionListaActividades}" style="width:150px">
                 <p:ajax listener="#{comentarioBean.obtenerIdLista}" update=":seleccionar:Actividadd"/>
                 <f:selectItem itemLabel="Seleccione Actividad" itemValue="" noSelectionOption="true" />
-                <f:selectItems value="#{actividadBean.listaActivi}" />
+                <f:selectItems value="#{listaActividadesBean.listActividades}" var="list" itemLabel="#{list.nameLista}" itemValue="#{list.idlista}" />
             </p:selectOneMenu>
          
             <p:outputLabel for="Actividadd" value="seleccione Actividad" />
             <p:selectOneMenu id="Actividadd" value="#{comentarioBean.seleccionActividad}" style="width:150px">
                 <p:ajax update=":Comentario:DatosComentario"/>
                 <f:selectItem itemLabel="Seleccione Actividad" itemValue="" noSelectionOption="true"/>
-                <f:selectItems value="#{comentarioBean.actividades}"/>
+                <f:selectItems value="#{actividadBean.listaActividad}" var="act" itemLabel="#{act.nameActividad}" itemValue="#{act.idactividad}"/>
             </p:selectOneMenu>
             
        </h:panelGrid>
@@ -193,7 +200,7 @@
       </h:form>
         
         
-    </h:body>
+    </body>
         </c:if>
 </html>
 

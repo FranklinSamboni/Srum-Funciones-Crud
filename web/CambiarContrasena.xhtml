@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Cambiar Contraseña</title>
+    </h:head>
+    <body background="fotos\fondo.jpg">
+        
+         <h:form id="form1">
+       <p:megaMenu>
+        <p:menuitem value="HOME" url="Principal.xhtml" icon="ui-icon-home" />
+        <p:menuitem value="Participantes" url="Participantes.xhtml" />
+        
+        <p:menuitem value="Proyectos" icon="ui-icon-document" url="Proyectos.xhtml"/>
+        <p:menuitem value="Lista de Actividades" icon="ui-icon-search" url="ListaActividades.xhtml"/>
+        <p:menuitem value="Actividades" icon="ui-icon-trash" url="Actividades.xhtml"/>
+        <p:menuitem value="Perfil" icon="ui-icon-pencil" url="Perfil.xhtml"/>
+        <p:menuitem value="Salir" action="#{sessionBean.logout}" icon="ui-icon-close"/>
+        </p:megaMenu>
+        </h:form>
+       
+           <h:form id="show">
+                
+                 <h:panelGrid columns="2" id="cambiarContraseña" style="position: absolute; top: 20%; left: 30%; right: 30%">
+                    
+                        <p:outputLabel value="Contraseña Actual" for="actual" style="color: brown; font-size: 20px;font-style: italic" />
+                    <p:password id="actual" value="#{perfilBean.password}" required="true" style="color: brown; font-size: 20px;font-style: italic" />
+
+                    <p:outputLabel for="contraseña1" value="Contraseña Nueva:" style="color: brown; font-size: 20px;font-style: italic"  />
+                    <p:password id="contraseña1" required="true" value="#{perfilBean.contraseña}" match="contraseña2" validatorMessage="Los campos ingresados no coinciden" style="color: brown; font-size: 20px;font-style: italic" />
+                
+                    <p:outputLabel for="contraseña2" value="Repita su contraseña :" style="color: brown; font-size: 20px;font-style: italic" />
+                    <p:password id="contraseña2" required="true" value="#{perfilBean.contraseña}" style="color: brown; font-size: 20px;font-style: italic" /> 
+            
+                    <p:commandButton actionListener="#{perfilBean.comprobar}" value="Guardar" update=":mensaje:info" oncomplete="PF('cambiarCont').show()" style="color: brown; font-size: 20px;font-style: italic" />
+                    <p:commandButton value="Cancelar" onclick="PF('cambiarCont').hide()" style="color: brown; font-size: 20px;font-style: italic" />
+             
+                    </h:panelGrid>
+                   
+           
+            </h:form>
+            
+        <h:form id="mensaje">
+          <p:dialog id="dlgshow" widgetVar="cambiarCont" modal="true"
+                      header="Cambiar Contrasena" showEffect="fade"
+                      resizable="false" minWidth="600" hideEffect="fade">
+                <p:outputPanel id="info">
+                    <p:panelGrid columns="2">
+                        <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true"/>
+                     </p:panelGrid>
+                <p:commandButton oncomplete="PF('cambiarCont').hide()" value="continuar" action="Perfil"/>
+            </p:outputPanel>
+         </p:dialog>          
+        </h:form>
+        
+        
+    </body>
+</html>
+

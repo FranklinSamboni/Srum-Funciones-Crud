@@ -88,7 +88,7 @@ public class PerfilBean {
     public void comprobar () throws NonexistentEntityException{
     
         if (password.equals(usuario.getPassword())){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Contraseña Modificada", "exitos"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Contraseña ", "Modificada"));
         
             usuario.setPassword(contraseña);
             EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
@@ -102,7 +102,7 @@ public class PerfilBean {
             }
         }
         else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No se cambio", "exitos"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Contraseña Actual", "NO VALIDA"));
         
         
         

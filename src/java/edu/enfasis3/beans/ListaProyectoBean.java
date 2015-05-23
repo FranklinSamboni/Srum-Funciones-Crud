@@ -135,10 +135,14 @@ public class ListaProyectoBean {
 
     public List<Proyecto> getList() {
         
+        list = new ArrayList<>();
         FacesContext context = FacesContext.getCurrentInstance();
         User usuario = ((SessionBean)(context.getApplication().evaluateExpressionGet(
                     context, "#{sessionBean}", Object.class))).getUser();
        
+        List<Proyecto> ListaPro = ((ParticipanteBean)(context.getApplication().evaluateExpressionGet(
+                    context, "#{participanteBean}", Object.class))).getListaProyectoPart();
+        
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
         EntityManager em = emf.createEntityManager();
         
@@ -146,6 +150,15 @@ public class ListaProyectoBean {
         q.setParameter("iduser", usuario.getIduser());
         list = q.getResultList();
         
+        int element1 = list.size();
+        int element2 = ListaPro.size();
+        
+        for (int i=0;i<element2;i++){
+        
+            list.add(element1+i, ListaPro.get(i));
+        
+        
+        }
         //list = usuario.getProyectoList();
         return list;
         

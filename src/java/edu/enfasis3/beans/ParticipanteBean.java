@@ -28,7 +28,8 @@ import javax.persistence.Query;
 public class ParticipanteBean {
 
     private List <Participante> participantes;
-    private Participante participanteSeleccion;
+   
+    private Participante participanteSele;
     
     private Proyecto proyectoSeleccion;
     private List <Proyecto> listaProyectoPart;
@@ -38,9 +39,38 @@ public class ParticipanteBean {
     
     private Participante usuarioSeleccion;
     
+    private Integer iduser;
+    private Integer idproyecto;
+    
     public ParticipanteBean() {
     }
 
+    public Participante getParticipanteSele() {
+        return participanteSele;
+    }
+
+    public void setParticipanteSele(Participante participanteSele) {
+        this.participanteSele = participanteSele;
+    }
+
+    public Integer getIduser() {
+        return iduser;
+    }
+
+    public void setIduser(Integer iduser) {
+        this.iduser = iduser;
+    }
+
+    public Integer getIdproyecto() {
+        return idproyecto;
+    }
+
+    public void setIdproyecto(Integer idproyecto) {
+        this.idproyecto = idproyecto;
+    }
+
+    
+    
     public Participante getUsuarioSeleccion() {
         return usuarioSeleccion;
     }
@@ -98,13 +128,7 @@ public class ParticipanteBean {
         this.listaIdsProyectos = listaIdsProyectos;
     }
     
-    public Participante getParticipanteSeleccion() {
-        return participanteSeleccion;
-    }
-
-    public void setParticipanteSeleccion(Participante participanteSeleccion) {
-        this.participanteSeleccion = participanteSeleccion;
-    }
+   
     
 
     public Proyecto getProyectoSeleccion() {
@@ -124,8 +148,7 @@ public class ParticipanteBean {
         Proyecto pro;
         listaProyectoPart = new ArrayList<>();
         
-        listaIdsProyectos = new ArrayList<>();
-        
+      
         FacesContext context = FacesContext.getCurrentInstance();
         User usuario = ((SessionBean)(context.getApplication().evaluateExpressionGet(
                     context, "#{sessionBean}", Object.class))).getUser();
@@ -175,6 +198,9 @@ public class ParticipanteBean {
     
     public void eliminarParticipante(){
     
+       
+        if(usuarioSeleccion != null){
+            System.out.println("NO ES NULO");
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
         ParticipanteJpaController pjc = new ParticipanteJpaController(emf);
         
@@ -187,7 +213,34 @@ public class ParticipanteBean {
         } catch(Exception e) {
             System.out.println(e);
         }
+        }
+        
+        else {
+        
+            System.out.println("ES NULO");
+        
+        }
+        
     
+       
     }
+     public void crearParticipante(){
+        
+            
+        }
+     public void guardarParticipante(){
+        
+            
+        }
+     public void nuevoParticipante(){
+            
+         
+         
+         participanteSele= new Participante();
+            
+            
+            
+     }
+     
     
 }

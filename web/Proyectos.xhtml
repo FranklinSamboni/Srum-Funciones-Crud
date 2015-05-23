@@ -7,16 +7,22 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <LINK href="css/animatePerfil.css" rel="stylesheet" type="text/css"></LINK>
+    <link href='http://fonts.googleapis.com/css?family=Shadows Into Light' rel='stylesheet' type='text/css'></link>
+     <link href='http://fonts.googleapis.com/css?family=Lobster|Muli|Oswald:700' rel='stylesheet' type='text/css'></link>
+   
     
     <c:if test="#{sessionBean.validation}" >
     <h:head>
         <title>Proyectos</title>
      </h:head>
     
-    <h:body>
-     <h:form>
+   <body background="fotos\fondo.jpg">
+     <h:form id="form1">
        <p:megaMenu>
         <p:menuitem value="HOME" url="Principal.xhtml" icon="ui-icon-home" />
+        <p:menuitem value="Participantes" url="Participantes.xhtml" />
+        
         <p:menuitem value="Proyectos" icon="ui-icon-document" url="Proyectos.xhtml"/>
         <p:menuitem value="Lista de Actividades" icon="ui-icon-search" url="ListaActividades.xhtml"/>
         <p:menuitem value="Actividades" icon="ui-icon-trash" url="Actividades.xhtml"/>
@@ -259,7 +265,7 @@
           
         </h:form>
       
-    </h:body> 
+    </body> 
       </c:if>
 </html>
 
