@@ -10,6 +10,7 @@ import edu.enfasis3.entity.ActividadJpaController;
 import edu.enfasis3.entity.Comentario;
 import edu.enfasis3.entity.ComentarioJpaController;
 import edu.enfasis3.entity.User;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -33,12 +34,31 @@ public class ComentarioBean {
     private List<Comentario> listaComentario;
     private Actividad actividad;
     private Integer identificador;
-    
+ 
+    private List actividades; 
+    private Integer seleccionActividad;
     
     
     public ComentarioBean() {
     }
 
+     public Integer getSeleccionActividad() {
+        return seleccionActividad;
+    }
+
+    public void setSeleccionActividad(Integer seleccionActividad) {
+        this.seleccionActividad = seleccionActividad;
+    }
+
+    
+    public List getActividades() {
+        return actividades;
+    }
+
+    public void setActividades(List actividades) {
+        this.actividades = actividades;
+    }
+    
     public Actividad getActividad() {
         return actividad;
     }
@@ -65,15 +85,12 @@ public class ComentarioBean {
 
     public List<Comentario> getListaComentario() {
         
-        FacesContext context = FacesContext.getCurrentInstance();
-        User usuario = ((SessionBean)(context.getApplication().evaluateExpressionGet(
-                    context, "#{sessionBean}", Object.class))).getUser();
-       
+        
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
         EntityManager em = emf.createEntityManager();
         
-        Query q = em.createNamedQuery("Comentario.findByComentario");
-        q.setParameter("iduser", usuario.getIduser());
+        Query q = em.createNamedQuery("Comentario.findByComentarioListaAc");
+        q.setParameter("idactividad", seleccionActividad);
         
         listaComentario = q.getResultList();
         
@@ -133,6 +150,29 @@ public class ComentarioBean {
         }catch(Exception e) {
             System.out.println(e);
         }
+    }
+    
+    
+    public void obtenerIdLista(){
+    
+        
+        int elemento;
+        Actividad act;
+        actividades = new ArrayList<>();
+        FacesContext context = FacesContext.getCurrentInstance();
+        List acti = ((ActividadBean)(context.getApplication().evaluateExpressionGet(
+                    context, "#{actividadBean}", Object.class))).getListaActividad();
+        
+        elemento = acti.size();
+        
+        
+        for (int i=0; i<elemento ;i++){
+            
+            act = (Actividad) acti.get(i);
+            actividades.add(i,act.getIdactividad());
+            
+        }
+    
     }
     
 }

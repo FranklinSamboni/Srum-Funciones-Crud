@@ -7,16 +7,19 @@ package edu.enfasis3.beans;
 
 
 import edu.enfasis3.entity.User;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -97,5 +100,11 @@ public class SessionBean implements Serializable {
         }
         return page;
     }
+    
+    public String logout() throws IOException {
+        validation=false;
+        return "index?faces-redirect=true";
+}
+
     
 }

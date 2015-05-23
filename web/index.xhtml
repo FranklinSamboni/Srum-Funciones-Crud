@@ -4,13 +4,20 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui">
+    <LINK href="animate.css" rel="stylesheet" type="text/css"></LINK>
+    <link href='http://fonts.googleapis.com/css?family=Indie Flower:400,700' rel='stylesheet' type='text/css'></link>
+    <link href='http://fonts.googleapis.com/css?family=Lobster|Muli|Oswald:700' rel='stylesheet' type='text/css'></link>
+    <link href='http://fonts.googleapis.com/css?family=Shadows Into Light' rel='stylesheet' type='text/css'></link>
+    
     <h:head>
         <title><h:outputText value="Login"/></title>
     </h:head>
     <h:body>
-        <h2 style="top: 100px; position: absolute; left: 585px"><h:outputText value="BIENVENIDO" style="font-style: italic; color: brown"/></h2>
+        <h1 class="option animated swing" style="top: 20px;  position: relative; left: 585px"><h:outputText value="BIENVENIDO" style="font-style: italic;  color: blueviolet"/></h1>
+        <h2 class="option animated zoomInDown"  style="top: 100px;  position: absolute; left: 500px"><h:outputText value="“Servicio de seguimiento a proyectos basado en” "  style="font-style: italic; color: purple"/></h2>
+        <h3 class="option animated rollIn" style="top: 90px; position: absolute; left: 650px"><h:outputText value="SCRUM" style="font-style: italic; color: blueviolet"/></h3>
         <h:form>
-            <h:panelGrid columns="2" style="position: absolute; top: 250px; left: 500px">
+            <h:panelGrid columns="2" style="position: absolute; top: 240px; left: 550px" class="option animated bounceInLeft">
                 <f:facet name="header"><h:outputText value="Inicio" style="color: brown; font-size: 20px;font-style: italic"/></f:facet>
                 <h:outputText value="Usuario" style="color: brown; font-size: 20px;font-style: italic"/>
                 <p:inputText value="#{sessionBean.login}" style="color: brown; font-size: 20px;font-style: italic"/>

@@ -2,29 +2,61 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      <LINK href="animate.css" rel="stylesheet" type="text/css"></LINK>
+    <link href='http://fonts.googleapis.com/css?family=Indie Flower:400,700' rel='stylesheet' type='text/css'></link>
+    <link href='http://fonts.googleapis.com/css?family=Lobster|Muli|Oswald:700' rel='stylesheet' type='text/css'></link>
+    <link href='http://fonts.googleapis.com/css?family=Shadows Into Light' rel='stylesheet' type='text/css'></link>
+   
     <h:head>
         <title><h:outputText value="Registro de Usuario"/></title>
     </h:head>
     <h:body>
-        <h:form id="show">
+        <h1 class="option animated swing" style="top: 20px;  position: absolute; left: 585px"><h:outputText value="REGISTRO" style="font-style: italic;  color: blueviolet"/></h1>
+        <h:form id="show" style="top: 200px; position: relative; left:470px">
+       
             
-            <h:panelGrid id="grid" columns="2" cellpadding="5" style="top: 100px; position: absolute; left: 450px" >
+            <h:panelGrid id="grid" columns="3" cellpadding="5" style="font-family: cursive" class="option animated flipInX" >
       
                 <p:outputLabel for="nombre" value="Nombre :" />
-                <p:inputText id="nombre" required="true" value="#{registrarBean.nombre}" requiredMessage="Complete Nombre"/>
+                <p:inputText id="nombre" required="true" value="#{registrarBean.nombre}" requiredMessage="Complete Nombre"
+                             maxlength="50">
+                     <f:validateLength minimum="2"/>
+                </p:inputText>
+                <p:watermark for="nombre" value="campo obligatorio" />
       
+               
                 <p:outputLabel for="apellido" value="Apellido :" />
-                <p:inputText id="apellido" required="true" value="#{registrarBean.apellido}" requiredMessage="Complete Apellido "/>
-      
+                <p:inputText id="apellido" required="true" value="#{registrarBean.apellido}" requiredMessage="Complete Apellido"
+                             maxlength="50">
+                    <f:validateLength minimum="2"/>
+                </p:inputText>
+                <p:watermark for="apellido" value="campo obligatorio" />
+                
                 <p:outputLabel for="identidad" value="Documento de identidad :" />
-                <p:inputText id="identidad" required="true"  value="#{registrarBean.identidad}" requiredMessage="Complete Documento de identidad"/>
+                <p:inputText id="identidad" required="true"  value="#{registrarBean.identidad}" requiredMessage="Complete Documento de identidad"
+                             maxlength="10">
+                <f:validateLength minimum="2"/>
+                </p:inputText>
+                <p:watermark for="identidad" value="10 valores max" />
       
                 <p:outputLabel for="correo" value="Correo electronico :" />
-                <p:inputText id="correo" required="true" value="#{registrarBean.correo}" requiredMessage="Complete Correo Electronico"/>
+                <p:inputText id="correo" required="true" value="#{registrarBean.correo}" requiredMessage="Complete Correo Electronico"
+                             maxlength="50">
+                    <f:validateRegex
+		pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                </p:inputText>
+                <p:watermark for="correo" value="correo verdadero" />
                 
-                <p:outputLabel for="username" value="Nombre de Usuario :" />
-                <p:inputText id="username" required="true" value="#{registrarBean.nombreusuario}" requiredMessage="Complete Nombre de Usuario"/>
+                
+                
+                <p:outputLabel for="username" value="Nombe de Usuario :" />
+                <p:inputText id="username" required="true" value="#{registrarBean.nombreusuario}" requiredMessage="Complete Nombre de Usuario"
+                             maxlength="20">
+                    <f:validateLength minimum="2"/>
+                </p:inputText>
+                <p:watermark for="username" value="Nombre de usuario" />
                 
                 
               <!--  <p:outputLabel for="contraseña1" value="Contraseña :" />

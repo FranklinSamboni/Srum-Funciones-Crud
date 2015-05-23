@@ -8,21 +8,22 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     
-    
+    <c:if test="#{sessionBean.validation}" >
     <h:head>
         <title>Proyectos</title>
      </h:head>
     
     <h:body>
-     <p:megaMenu  style="margin-top:20px">
+     <h:form>
+       <p:megaMenu>
         <p:menuitem value="HOME" url="Principal.xhtml" icon="ui-icon-home" />
         <p:menuitem value="Proyectos" icon="ui-icon-document" url="Proyectos.xhtml"/>
         <p:menuitem value="Lista de Actividades" icon="ui-icon-search" url="ListaActividades.xhtml"/>
         <p:menuitem value="Actividades" icon="ui-icon-trash" url="Actividades.xhtml"/>
         <p:menuitem value="Perfil" icon="ui-icon-pencil" url="Perfil.xhtml"/>
-        <p:menuitem value="Salir" url="index.xhtml" icon="ui-icon-close"/>
-        
-     </p:megaMenu>
+        <p:menuitem value="Salir" action="#{sessionBean.logout}" icon="ui-icon-close"/>
+        </p:megaMenu>
+        </h:form>
      
       <h3>Lista proyectos</h3>
 
@@ -116,7 +117,7 @@
        </h:form>
 
       
-      <h:form id="ListaProyectos">
+     <h:form id="ListaProyectos">
         
         <p:panel header="Lista de Proyectos">
             <p:contextMenu id="TablaProyectosContextMenu" for="listaDatosProyectos">  
@@ -177,7 +178,88 @@
           
         </h:form>
       
-    </h:body> 
+     <!--proyectos en los que participo -->
+
+      <h:form id="VerParticipanteForm">
+      <p:dialog id="VerParticipanteDlg" widgetVar="VerParticipanteDialog" modal="true" header="Detalles del proyecto" showEffect="fade" hideEffect="fade">
+
+          <h:panelGroup id="displayVerpart">
+                    <p:panelGrid columns="2" columnClasses="column" rendered="#{participanteBean.proyectoSeleccion != null}">
+
+                        <h:outputText value="Codigo"/>
+                        <h:outputText value="#{participanteBean.proyectoSeleccion.idproyecto}" title="Codigo"/>
+
+                        <h:outputText value="Nombre Proyecto"/>
+                        <h:outputText value="#{participanteBean.proyectoSeleccion.nameProyecto}" title="Nombre Proyecto"/>
+
+                        <h:outputText value="Descripcion"/>
+                        <h:outputText value="#{participanteBean.proyectoSeleccion.descriptionProyecto}" title="Descripcion"/>
+
+                        <h:outputText value="Fecha de inicio"/>
+                        <h:outputText value="#{participanteBean.proyectoSeleccion.begindateProyecto}" title="Fecha de inicio"/>
+
+                        <h:outputText value="Fecha de terminacion"/>
+                        <h:outputText value="#{participanteBean.proyectoSeleccion.enddateProyecto}" title="Fecha de terminacion"/>
+
+                        <h:outputText value="Director"/>
+                        <h:outputText value="#{participanteBean.proyectoSeleccion.manager.name}" title="Director"/>
+
+                        <h:outputText value="Fecha de registro"/>
+                        <h:outputText value="#{participanteBean.proyectoSeleccion.registrationdateProyecto}" title="Fecha de registro"/>
+
+                        <h:outputText value="Fecha de Actualizacion"/>
+                        <h:outputText value="#{participanteBean.proyectoSeleccion.updatedateProyecto}" title="Fecha de Actualizacion"/>
+                    </p:panelGrid>
+                    <p:commandButton value="Cerrar" onclick="PF('VerParticipanteDialog').hide()"/>
+                </h:panelGroup>
+         </p:dialog>
+       </h:form>
+     
+      <h:form id="ListaParticipante">
+        
+        <p:panel header="Lista de Proyectos en los que Participa">
+            <p:contextMenu id="TablaParticipanteContextMenu" for="listaDatosParticipante">  
+                <p:menuitem value="Ver" onclick="document.getElementById('ListaParticipante:verButton').click();" icon="ui-icon-search"/>
+                
+            </p:contextMenu>
+            <p:dataTable id="listaDatosParticipante"
+                         value="#{participanteBean.listaProyectoPart}"
+                         var="listpro"
+                         rowKey="#{listpro.idproyecto}"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{participanteBean.proyectoSeleccion}">
+
+                <p:ajax event="rowSelect"   update=":ListaParticipante:verButton  :ListaParticipante:TablaParticipanteContextMenu"/>
+                <p:ajax event="rowUnselect" update=":ListaParticipante:verButton  :ListaParticipante:TablaParticipanteContextMenu"/>
+                <p:ajax event="contextMenu" update=":ListaParticipante:verButton"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('ListaParticipante:verButton').click();"/>
+
+                <p:column sortBy="#{listpro.idproyecto}" filterBy="#{listpro.idproyecto}">
+                    <f:facet name="header">
+                        <h:outputText value="Codigo Proyecto"/>
+                    </f:facet>
+                    <h:outputText value="#{listpro.idproyecto}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{listpro.nameProyecto}" filterBy="#{listpro.nameProyecto}">
+                    <f:facet name="header">
+                        <h:outputText value="Nombre Proyecto"/>
+                    </f:facet>
+                    <h:outputText value="#{listpro.nameProyecto}"/>
+                </p:column>
+            </p:dataTable>
+
+        </p:panel>
+          
+          <p:commandButton id="verButton"   style="visibility: hidden;" icon="ui-icon-search" value="Ver" update=":VerParticipanteForm" oncomplete="PF('VerParticipanteDialog').show()" disabled="#{empty participanteBean.proyectoSeleccion}"/>
+          
+        </h:form>
       
+    </h:body> 
+      </c:if>
 </html>
 

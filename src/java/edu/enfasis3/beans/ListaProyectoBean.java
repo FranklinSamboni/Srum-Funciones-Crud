@@ -39,23 +39,22 @@ public class ListaProyectoBean {
     private Proyecto seleccion ;
     private List proyectoNombres;
     private List<Proyecto> list;
-    private Integer idproyecto=2;
-    
-    
-    
+    private List proyectosPropios;
+   
+        
     public ListaProyectoBean() {
     }
 
-    public List<String> getProyectoNombres() {
+    public List getProyectosPropios() {
         
-        proyectoNombres = new ArrayList<>();
+        proyectosPropios = new ArrayList<>();
         int element;
         Proyecto pro;
         
         FacesContext context = FacesContext.getCurrentInstance();
         User usuario = ((SessionBean)(context.getApplication().evaluateExpressionGet(
                     context, "#{sessionBean}", Object.class))).getUser();
-       
+        
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
         EntityManager em = emf.createEntityManager();
         
@@ -65,10 +64,56 @@ public class ListaProyectoBean {
         
         element = list.size();
         
-        for (int i=0; i<element ;i++){
+        for (int i=0; i<element;i++){
+            
             
             pro=list.get(i);
+            proyectosPropios.add(i, pro.getIdproyecto());
+            
+            
+        }
+        
+        
+        
+        return proyectosPropios;
+    }
+
+    public void setProyectosPropios(List proyectosPropios) {
+        this.proyectosPropios = proyectosPropios;
+    }
+
+    public List getProyectoNombres() {
+        
+        proyectoNombres = new ArrayList<>();
+        int element,element2;
+        Proyecto pro;
+        
+        FacesContext context = FacesContext.getCurrentInstance();
+        User usuario = ((SessionBean)(context.getApplication().evaluateExpressionGet(
+                    context, "#{sessionBean}", Object.class))).getUser();
+        
+        List ListIdsPro = ((ParticipanteBean)(context.getApplication().evaluateExpressionGet(
+                    context, "#{participanteBean}", Object.class))).getListaIdsProyectos();
+       
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
+        EntityManager em = emf.createEntityManager();
+        
+        Query q = em.createNamedQuery("Proyecto.findByAllproyectoUser");
+        q.setParameter("iduser", usuario.getIduser());
+        list = q.getResultList();
+        
+        element = list.size();
+        element2  = ListIdsPro.size();
+        for (int i=0; i<element+element2 ;i++){
+            
+            if(i<element){
+            pro=list.get(i);
             proyectoNombres.add(i, pro.getIdproyecto());
+            }
+            else
+            {
+            proyectoNombres.add(i, ListIdsPro.get(i-element));
+            }
         }
         
         
@@ -88,16 +133,6 @@ public class ListaProyectoBean {
         this.seleccion = seleccion;
     }
 
-    public Integer getIdproyecto() {
-        return idproyecto;
-    }
-
-    public void setIdproyecto(Integer idproyecto) {
-        this.idproyecto = idproyecto;
-    }
-
-    
-    
     public List<Proyecto> getList() {
         
         FacesContext context = FacesContext.getCurrentInstance();

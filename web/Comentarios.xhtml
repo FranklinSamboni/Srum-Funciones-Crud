@@ -3,20 +3,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <c:if test="#{sessionBean.validation}" >
     <h:head>
         <title>Comentarios</title>
     </h:head>
     
     <h:body>
-     <p:megaMenu  style="margin-top:20px">
+     <h:form>
+       <p:megaMenu>
         <p:menuitem value="HOME" url="Principal.xhtml" icon="ui-icon-home" />
         <p:menuitem value="Proyectos" icon="ui-icon-document" url="Proyectos.xhtml"/>
         <p:menuitem value="Lista de Actividades" icon="ui-icon-search" url="ListaActividades.xhtml"/>
-        <p:menuitem value="Actividades" icon="ui-icon-trash" url="ListaActividades.xhtml"/>
+        <p:menuitem value="Actividades" icon="ui-icon-trash" url="Actividades.xhtml"/>
         <p:menuitem value="Perfil" icon="ui-icon-pencil" url="Perfil.xhtml"/>
-        <p:menuitem value="Salir" url="index.xhtml" icon="ui-icon-close"/>
-     </p:megaMenu>
+        <p:menuitem value="Salir" action="#{sessionBean.logout}" icon="ui-icon-close"/>
+        </p:megaMenu>
+        </h:form>
                  
     <h:form id="CrearComentarioForm">
       
@@ -51,8 +55,8 @@
                         <h:outputText value="Codigo"/>
                         <h:outputText value="#{comentarioBean.comentario.idcomentario}" title="Codigo"/>
 
-                        <h:outputText value="Nombre de la Comentario"/>
-                        <h:outputText value="#{comentarioBean.comentario.nameComentario}" title="Nombre de la Comentario"/>
+                        <h:outputText value="Nombre del Comentario"/>
+                        <h:outputText value="#{comentarioBean.comentario.nameComentario}" title="Nombre del Comentario"/>
 
                         <h:outputText value="Descripcion"/>
                         <h:outputText value="#{comentarioBean.comentario.descriptionComentario}" title="Descripcion"/>
@@ -89,6 +93,38 @@
 
             </p:dialog>
     </h:form>
+        
+     <h:form id="seleccionar">
+            
+     <p:panel header="Seleccione Proyecto" style="margin-bottom:10px;">
+        <h:panelGrid columns="2" cellpadding="5">
+            <p:outputLabel for="proyecto" value="Proyecto:  " />
+            <p:selectOneMenu id="proyecto" value="#{listaActividadesBean.seleccionProyecto}" style="width:150px">
+                <p:ajax listener="#{actividadBean.obtenerIdProyecto}" update=":seleccionar:listaActividad"/>
+                <f:selectItem itemLabel="Seleccione proyecto" itemValue="" noSelectionOption="true" />
+                <f:selectItems value="#{listaProyectoBean.proyectoNombres}" />
+            </p:selectOneMenu>
+            
+            <p:outputLabel for="listaActividad" value="Seleccione Listas Actividades" />
+            <p:selectOneMenu id="listaActividad" value="#{actividadBean.seleccionListaActividades}" style="width:150px">
+                <p:ajax listener="#{comentarioBean.obtenerIdLista}" update=":seleccionar:Actividadd"/>
+                <f:selectItem itemLabel="Seleccione Actividad" itemValue="" noSelectionOption="true" />
+                <f:selectItems value="#{actividadBean.listaActivi}" />
+            </p:selectOneMenu>
+         
+            <p:outputLabel for="Actividadd" value="seleccione Actividad" />
+            <p:selectOneMenu id="Actividadd" value="#{comentarioBean.seleccionActividad}" style="width:150px">
+                <p:ajax update=":Comentario:DatosComentario"/>
+                <f:selectItem itemLabel="Seleccione Actividad" itemValue="" noSelectionOption="true"/>
+                <f:selectItems value="#{comentarioBean.actividades}"/>
+            </p:selectOneMenu>
+            
+       </h:panelGrid>
+     </p:panel>
+            
+    </h:form>
+    
+        
         
     <h:form id="Comentario">
         
@@ -157,7 +193,7 @@
       </h:form>
         
         
-        
     </h:body>
+        </c:if>
 </html>
 
