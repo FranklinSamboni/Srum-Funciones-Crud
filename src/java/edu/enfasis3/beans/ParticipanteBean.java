@@ -28,17 +28,15 @@ import javax.persistence.Query;
 public class ParticipanteBean {
 
     private List <Participante> participantes;
-   
     private Participante participanteSele;
+    private Integer idProyectoSeleccion;
+    
     
     private Proyecto proyectoSeleccion;
     private List <Proyecto> listaProyectoPart;
     
-    private List<Integer> listaIdsProyectos;
-    private Integer idProyectoSeleccion;
-    
-    private Participante usuarioSeleccion;
-    
+   
+   
     private Integer iduser;
     private Integer idproyecto;
     
@@ -68,18 +66,6 @@ public class ParticipanteBean {
     public void setIdproyecto(Integer idproyecto) {
         this.idproyecto = idproyecto;
     }
-
-    
-    
-    public Participante getUsuarioSeleccion() {
-        return usuarioSeleccion;
-    }
-
-    public void setUsuarioSeleccion(Participante usuarioSeleccion) {
-        this.usuarioSeleccion = usuarioSeleccion;
-    }
-
-    
     
     public Integer getIdProyectoSeleccion() {
         return idProyectoSeleccion;
@@ -88,49 +74,8 @@ public class ParticipanteBean {
     public void setIdProyectoSeleccion(Integer idProyectoSeleccion) {
         this.idProyectoSeleccion = idProyectoSeleccion;
     }
+  
     
-
-    public List<Integer> getListaIdsProyectos() {
-        
-        int elemt;
-        Participante part;
-        Proyecto pro;
-        
-        listaIdsProyectos = new ArrayList<>();
-        
-        FacesContext context = FacesContext.getCurrentInstance();
-        User usuario = ((SessionBean)(context.getApplication().evaluateExpressionGet(
-                    context, "#{sessionBean}", Object.class))).getUser();
-        
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
-        EntityManager em = emf.createEntityManager();
-        
-        Query q = em.createNamedQuery("Participante.findListaParticipante");
-        q.setParameter("iduser", usuario.getIduser());
-        
-        List participant = q.getResultList();
-        
-        elemt = participant.size();
-        
-        for(int i=0;i<elemt;i++){
-        
-            part = (Participante) participant.get(i);
-            pro = part.getIdproyecto();
-             // para capturar los ids de los proyectos.
-            listaIdsProyectos.add(i, pro.getIdproyecto());
-            
-        }
-       
-        return listaIdsProyectos;
-    }
-
-    public void setListaIdsProyectos(List<Integer> listaIdsProyectos) {
-        this.listaIdsProyectos = listaIdsProyectos;
-    }
-    
-   
-    
-
     public Proyecto getProyectoSeleccion() {
         return proyectoSeleccion;
     }
@@ -199,7 +144,7 @@ public class ParticipanteBean {
     public void eliminarParticipante(){
     
        
-        if(usuarioSeleccion != null){
+        if(participanteSele != null){
             System.out.println("NO ES NULO");
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
         ParticipanteJpaController pjc = new ParticipanteJpaController(emf);
@@ -208,7 +153,7 @@ public class ParticipanteBean {
         
          try {
                 
-                pjc.destroy(usuarioSeleccion.getIdparticipante());
+                pjc.destroy(participanteSele.getIdparticipante());
             
         } catch(Exception e) {
             System.out.println(e);
@@ -225,21 +170,16 @@ public class ParticipanteBean {
        
     }
      public void crearParticipante(){
-        
-            
+           
         }
      public void guardarParticipante(){
         
             
         }
      public void nuevoParticipante(){
-            
-         
          
          participanteSele= new Participante();
-            
-            
-            
+           
      }
      
     

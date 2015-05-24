@@ -35,7 +35,6 @@ public class ListaActividadesBean {
     private List<Lista> listActividades;
     private Proyecto proyectolista;
     private Integer seleccionProyecto;
-    private Integer identi;
   
     public ListaActividadesBean() {
     }
@@ -46,15 +45,6 @@ public class ListaActividadesBean {
 
     public void setSeleccionProyecto(Integer seleccionProyecto) {
         this.seleccionProyecto = seleccionProyecto;
-    }
-
-    
-    public Integer getIdenti() {
-        return identi;
-    }
-
-    public void setIdenti(Integer identi) {
-        this.identi = identi;
     }
     
     public Proyecto getProyectolista() {
@@ -75,15 +65,10 @@ public class ListaActividadesBean {
 
     public List<Lista> getListActividades() {
         
-       // FacesContext context = FacesContext.getCurrentInstance();
-      //  User user = ((SessionBean)(context.getApplication().evaluateExpressionGet(
-        //            context, "#{sessionBean}", Object.class))).getUser();
-        
+       
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
         EntityManager em = emf.createEntityManager();
         
-        //Query q = em.createNamedQuery("Lista.findByProyectoLista");
-        //q.setParameter("iduser",user.getIduser());
         Query q = em.createNamedQuery("Lista.findByProyectos");
         q.setParameter("idproyecto",seleccionProyecto);
         
@@ -167,8 +152,7 @@ public class ListaActividadesBean {
         else {
             System.out.println("NO PROYECTO");
             }
-        
-    
+     
     }
     
 }

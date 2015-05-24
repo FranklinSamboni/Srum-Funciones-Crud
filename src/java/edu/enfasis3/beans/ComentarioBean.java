@@ -33,16 +33,13 @@ public class ComentarioBean {
     private Comentario comentario;
     private List<Comentario> listaComentario;
     private Actividad actividad;
-    private Integer identificador;
- 
-    private List actividades; 
     private Integer seleccionActividad;
     
     
     public ComentarioBean() {
     }
 
-     public Integer getSeleccionActividad() {
+    public Integer getSeleccionActividad() {
         return seleccionActividad;
     }
 
@@ -50,29 +47,12 @@ public class ComentarioBean {
         this.seleccionActividad = seleccionActividad;
     }
 
-    
-    public List getActividades() {
-        return actividades;
-    }
-
-    public void setActividades(List actividades) {
-        this.actividades = actividades;
-    }
-    
     public Actividad getActividad() {
         return actividad;
     }
 
     public void setActividad(Actividad actividad) {
         this.actividad = actividad;
-    }
-
-    public Integer getIdentificador() {
-        return identificador;
-    }
-
-    public void setIdentificador(Integer identificador) {
-        this.identificador = identificador;
     }
     
     public Comentario getComentario() {
@@ -115,7 +95,7 @@ public class ComentarioBean {
         ComentarioJpaController cjc = new ComentarioJpaController(emf);
         
         ActividadJpaController ajc = new ActividadJpaController(emf);
-        actividad = ajc.findActividad(identificador);
+        actividad = ajc.findActividad(seleccionActividad);
         
         try{
             comentario.setIdactividad(actividad);
@@ -151,28 +131,5 @@ public class ComentarioBean {
             System.out.println(e);
         }
     }
-    
-    
-    public void obtenerIdLista(){
-    
-        
-        int elemento;
-        Actividad act;
-        actividades = new ArrayList<>();
-        FacesContext context = FacesContext.getCurrentInstance();
-        List acti = ((ActividadBean)(context.getApplication().evaluateExpressionGet(
-                    context, "#{actividadBean}", Object.class))).getListaActividad();
-        
-        elemento = acti.size();
-        
-        
-        for (int i=0; i<elemento ;i++){
-            
-            act = (Actividad) acti.get(i);
-            actividades.add(i,act.getIdactividad());
-            
-        }
-    
-    }
-    
+   
 }

@@ -36,8 +36,6 @@
               <h:panelGroup id="displayCrear">
                   
                     <p:panelGrid columns="2" >
-                        <h:outputText value="Ingrese Id Actividad"/>
-                        <p:inputText value="#{comentarioBean.identificador}" required="true"/>
                         
                         <h:outputText value="Nombre Comentario"/>
                         <p:inputText value="#{comentarioBean.comentario.nameComentario}" required="true"/>
@@ -107,14 +105,14 @@
         <h:panelGrid columns="2" cellpadding="5">
             <p:outputLabel for="proyecto" value="Proyecto:  " />
             <p:selectOneMenu id="proyecto" value="#{listaActividadesBean.seleccionProyecto}" style="width:150px">
-                <p:ajax listener="#{actividadBean.obtenerIdProyecto}" update=":seleccionar:listaActividad"/>
+                <p:ajax update=":seleccionar:listaActividad"/>
                 <f:selectItem itemLabel="Seleccione proyecto" itemValue="" noSelectionOption="true" />
                 <f:selectItems value="#{listaProyectoBean.list}" var="pro" itemLabel="#{pro.nameProyecto}"  itemValue="#{pro.idproyecto}"/>
             </p:selectOneMenu>
             
             <p:outputLabel for="listaActividad" value="Seleccione Listas Actividades" />
             <p:selectOneMenu id="listaActividad" value="#{actividadBean.seleccionListaActividades}" style="width:150px">
-                <p:ajax listener="#{comentarioBean.obtenerIdLista}" update=":seleccionar:Actividadd"/>
+                <p:ajax   update=":seleccionar:Actividadd"/>
                 <f:selectItem itemLabel="Seleccione Actividad" itemValue="" noSelectionOption="true" />
                 <f:selectItems value="#{listaActividadesBean.listActividades}" var="list" itemLabel="#{list.nameLista}" itemValue="#{list.idlista}" />
             </p:selectOneMenu>
