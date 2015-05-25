@@ -5,10 +5,12 @@
  */
 package edu.enfasis3.beans;
 
+import edu.enfasis3.correo.EnviarCorreoScrum;
 import edu.enfasis3.entity.Participante;
 import edu.enfasis3.entity.ParticipanteJpaController;
 import edu.enfasis3.entity.Proyecto;
 import edu.enfasis3.entity.User;
+import edu.enfasis3.entity.UserJpaController;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -19,6 +21,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
+
 /**
  *
  * @author Frank
@@ -27,47 +32,47 @@ import javax.persistence.Query;
 @RequestScoped
 public class ParticipanteBean {
 
-    private List <Participante> participantes;
-    private Participante participanteSele;
-    private Integer idProyectoSeleccion;
+    private Integer idProyectoSeleccion; // selecciona un proyecto del usuario. El boton que despliega las opciones
+    
+    private List <User> participantes; // guarda la lista de participantes a un proyecto
+    private User participanteSele; // selecciona un participante.
+        
+    private Proyecto proyectoSeleccion; // selecciona un proyecto en "Proyecto.xhtml" 
+    private List <Proyecto> listaProyectoPart; // guarda la lista de proyectos en los que el usuario participa
+    
+    private String correo;
+    private Integer invitacion;
     
     
-    private Proyecto proyectoSeleccion;
-    private List <Proyecto> listaProyectoPart;
-    
-   
-   
-    private Integer iduser;
-    private Integer idproyecto;
     
     public ParticipanteBean() {
     }
 
-    public Participante getParticipanteSele() {
+    public String getCorreo() {
+        return correo;
+    }
+
+    public Integer getInvitacion() {
+        return invitacion;
+    }
+
+    public void setInvitacion(Integer invitacion) {
+        this.invitacion = invitacion;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+    
+    public User getParticipanteSele() {
         return participanteSele;
     }
 
-    public void setParticipanteSele(Participante participanteSele) {
+    public void setParticipanteSele(User participanteSele) {
         this.participanteSele = participanteSele;
     }
 
-    public Integer getIduser() {
-        return iduser;
-    }
-
-    public void setIduser(Integer iduser) {
-        this.iduser = iduser;
-    }
-
-    public Integer getIdproyecto() {
-        return idproyecto;
-    }
-
-    public void setIdproyecto(Integer idproyecto) {
-        this.idproyecto = idproyecto;
-    }
-    
-    public Integer getIdProyectoSeleccion() {
+     public Integer getIdProyectoSeleccion() {
         return idProyectoSeleccion;
     }
 
@@ -124,27 +129,39 @@ public class ParticipanteBean {
     }
    
 
-    public List <Participante> getParticipantes() {
+    public List <User> getParticipantes() {
+        
+        participantes = new ArrayList<>();
        
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
         EntityManager em = emf.createEntityManager();
         
         Query q = em.createNamedQuery("Participante.findUsuariosEnProyecto");
         q.setParameter("idproyecto", idProyectoSeleccion);
+       
+        List<Participante> ListParti  = q.getResultList();
+        Participante parti;
         
-        participantes = q.getResultList();
+        int element = ListParti.size();
+        
+        for(int i=0; i<element ;i++){
+            
+            parti = ListParti.get(i);
+            participantes.add(i, parti.getIduser());
+            
+        }
+                
         
         return participantes;
     }
 
-    public void setParticipant(List<Participante> participantes) {
+    public void setParticipant(List<User> participantes) {
         this.participantes = participantes;
     }
     
     public void eliminarParticipante(){
     
        
-        if(participanteSele != null){
             System.out.println("NO ES NULO");
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
         ParticipanteJpaController pjc = new ParticipanteJpaController(emf);
@@ -153,34 +170,127 @@ public class ParticipanteBean {
         
          try {
                 
-                pjc.destroy(participanteSele.getIdparticipante());
+                pjc.destroy(7);
             
         } catch(Exception e) {
             System.out.println(e);
         }
-        }
         
-        else {
         
-            System.out.println("ES NULO");
-        
-        }
+          System.out.println("ES NULO");
+       
         
     
        
     }
-     public void crearParticipante(){
+    
+    public void crearParticipante(){
            
-        }
-     public void guardarParticipante(){
+         if(correo!=null){
+             
+         invitacion = idProyectoSeleccion; // se captura el id del proyecto
+         EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
+         EntityManager em = emf.createEntityManager();
+         
+         Query q = em.createNamedQuery("User.findByEmail");
+         q.setParameter("email", correo); 
+         List listaCorreo = q.getResultList(); // se obtiene un usuario que coincida con el correo o si no existe es nulo
+         
+         
+         User user ;
+         UserJpaController pjc = new UserJpaController(emf);
         
+         EnviarCorreoScrum send = new EnviarCorreoScrum(correo,"");
+             
+         if(listaCorreo.isEmpty()){ // Correo no esta registrado
+             
+              send.enviarCorreoNoRegistrado();
+               user = new User();
+              user.setDocid("0000default");
+              user.setEmail(correo);
+              user.setLastname("0000default");
+              user.setName("0000default");
+              user.setPassword("0000default");
+              user.setUsername("0000default");
+              
+              user.setInvitacion(idProyectoSeleccion);
+              
+          
+              try {
+                    pjc.create(user);  // se crea un usuario por defecto que luego es modificado en el registro
+                } catch(Exception e) {
+                    System.out.println(e);
+                }
+             }
+         
+             else{ // Correo registrado
+             user = (User) listaCorreo.get(0); // Se envia un invitacion y se asigna un proyecto.
+             user.setInvitacion(idProyectoSeleccion);
+             try {
+                    pjc.edit(user);
+                } catch(Exception e) {
+                    System.out.println(e);
+                }
+             
+             send.enviarCorreoRegistrado();
+             
+         }
+       }
+     }
+    
+    
+    public String aceptarInvitacion() throws Exception{
+        
+            Proyecto proyectoInvitado;
+            FacesContext context = FacesContext.getCurrentInstance();
+            User usuario = ((SessionBean)(context.getApplication().evaluateExpressionGet(
+                    context, "#{sessionBean}", Object.class))).getUser();
+            
+    
+            EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
+            EntityManager em = emf.createEntityManager();
+            
+            Query q = em.createNamedQuery("Proyecto.findByIdproyecto"); // se obtiene el proyecto al que fue invitado
+            q.setParameter("idproyecto", usuario.getInvitacion()); 
+            List listInvitado = q.getResultList(); // se obtiene un usuario que coincida con el correo o si no existe es nulo
+            
+            proyectoInvitado = (Proyecto) listInvitado.get(0);
+            
+            Participante ParticipanteInvitado = new Participante();
+            ParticipanteInvitado.setIduser(usuario);
+            ParticipanteInvitado.setIdproyecto(proyectoInvitado);
+            
+            ParticipanteJpaController injpa = new ParticipanteJpaController(emf);
+            
+            try{
+            injpa.create(ParticipanteInvitado);
+            return "Principal?faces-redirect=true";
+            }catch(Exception e)  {
+                System.out.println(e);
+            return "Error?faces-redirect=true";
+            }
             
         }
-     public void nuevoParticipante(){
-         
-         participanteSele= new Participante();
-           
-     }
-     
     
+    public String rechazarInvitacion(){ // se elimina la invitacion
+    
+        FacesContext context = FacesContext.getCurrentInstance();
+            User usuario = ((SessionBean)(context.getApplication().evaluateExpressionGet(
+                    context, "#{sessionBean}", Object.class))).getUser();
+    
+            EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
+            UserJpaController pjc = new UserJpaController(emf);
+            usuario.setInvitacion(0);
+              
+          
+              try {
+                    pjc.edit(usuario);  // se crea un usuario por defecto que luego es modificado en el registro
+                    return "Principal?faces-redirect=true";
+            
+              } catch(Exception e) {
+                    System.out.println(e);
+                return "Error?faces-redirect=true";
+            
+                }
+    }
 }

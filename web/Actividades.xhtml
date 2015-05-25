@@ -127,7 +127,7 @@
         <h:panelGrid columns="2" cellpadding="5">
             <p:outputLabel for="proyecto" value="Proyecto:  " />
             <p:selectOneMenu id="proyecto" value="#{listaActividadesBean.seleccionProyecto}" style="width:150px">
-                <p:ajax update=":seleccionar:listaActividad"/>
+                <p:ajax listener="#{listaActividadesBean.actualizarTabla}" update=":seleccionar:listaActividad"/>
                 <f:selectItem itemLabel="Seleccione proyecto" itemValue="" noSelectionOption="true" />
                 <f:selectItems value="#{listaProyectoBean.list}" var="pro" itemLabel="#{pro.nameProyecto}"  itemValue="#{pro.idproyecto}"/>
             </p:selectOneMenu>

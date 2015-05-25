@@ -38,6 +38,44 @@ public class EnviarCorreoScrum {
         }else{ System.out.println("Error no lo envio");}
         
     }
+    
+     public void enviarCorreoRegistrado(){//hey
+        c=new Correo_scrum();//hey variable global
+        c.setContrasenia("szhqbkzhrlzveeyo");
+        c.setUsuarioCorreo("elric941@gmail.com");
+        c.setAsunto("Invitacion a proyecto SCRUM");
+        c.setMensaje("Ha sido invitado a ser parte de un proyecto SCRUM, Ingrese a el siguiente link"
+                + " para aceptar la invitación http://localhost:11318/SCRUMproyecto/faces/index.xhtml"); 
+        c.setDestino(destino);
+        
+        c.setNombreArchivo("Verificacion.txt");
+        c.setRutaArchivo("D:\\Universidad\\Enfasis 3\\ProyectoEnfasis\\SCRUMproyecto\\Verificacion.txt");
+        
+        ControladorScrum co=new ControladorScrum();
+        if(co.enviarCorreo(c)){
+        System.out.println("Envio correo");
+        }else{ System.out.println("Error no lo envio");}
+        
+    }
+      public void enviarCorreoNoRegistrado(){//hey
+        c=new Correo_scrum();//hey variable global
+        c.setContrasenia("szhqbkzhrlzveeyo");
+        c.setUsuarioCorreo("elric941@gmail.com");
+        c.setAsunto("Correo de verificacion");
+        c.setMensaje("Ha sido invitado a ser parte de un proyecto SCRUM, Ingrese a el siguiente link"
+                   + "para registrarse y aceptar la "
+                   + "invitacion http://localhost:11318/SCRUMproyecto/faces/RegistrarUsuarios.xhtml");
+        c.setDestino(destino);
+        
+        c.setNombreArchivo("Verificacion.txt");
+        c.setRutaArchivo("D:\\Universidad\\Enfasis 3\\ProyectoEnfasis\\SCRUMproyecto\\Verificacion.txt");
+        
+        ControladorScrum co=new ControladorScrum();
+        if(co.enviarCorreo(c)){
+        System.out.println("Envio correo");
+        }else{ System.out.println("Error no lo envio");}
+        
+    }
 
     public Correo_scrum getC() {
         return c;

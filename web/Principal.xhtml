@@ -32,7 +32,22 @@
         
 
            <h1> <p:outputLabel class="option animated flip" style=" font-family:Shadows Into Light; color: blueviolet" value= "SERVICIO DE SEGUIMIENTO DE PROYECTOS SCRUM"/>  </h1>
-            
+          <h:form >
+                 
+               
+               <h:panelGrid columns="2">
+                   
+                   <h:outputText value="Ha sido invitado al proyecto: "/>
+                   <h:outputText value="#{sessionBean.user.invitacion}"/>
+                   
+                   <p:commandButton value="Aceptar Invitacion" action="#{participanteBean.aceptarInvitacion}"/>
+                   <p:commandButton value="Rechazar Invitacion" action="#{participanteBean.rechazarInvitacion}"/>
+                   
+               </h:panelGrid>      
+               
+                
+            </h:form>
+              
        
         </h:form> 
         

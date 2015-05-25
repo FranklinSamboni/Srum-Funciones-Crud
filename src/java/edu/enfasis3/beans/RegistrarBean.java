@@ -11,14 +11,17 @@ import edu.enfasis3.correo.EnviarCorreoScrum;
 import edu.enfasis3.entity.User;
 
 import edu.enfasis3.entity.UserJpaController;
+import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.persistence.EntityManager;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 /**
  *
@@ -88,25 +91,34 @@ public class RegistrarBean {
     
     public void verificar() {
         
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Informacion registrada", "Se ha enviado un correo a la direccion de correo ingresada."));
-        user = new User();
-        user.setName(nombre);
-        user.setLastname(apellido);
-        user.setDocid(identidad);
-        user.setEmail(correo);
-        user.setUsername(nombreusuario);
+         EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
+         EntityManager em = emf.createEntityManager();
+         
+         Query q = em.createNamedQuery("User.findByEmail");
+         q.setParameter("email", correo);
         
-        contraseña = PasswordGenerator.getPassword(PasswordGenerator.NUMEROS+
+         List listaCorreo = q.getResultList();
+         
+         if(listaCorreo.isEmpty()){ // el correo no existe
+           
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Informacion registrada", "Se ha enviado un correo a la direccion de correo ingresada."));
+                user = new User();
+                user.setName(nombre);
+                user.setLastname(apellido);
+                user.setDocid(identidad);
+                user.setEmail(correo);
+                user.setUsername(nombreusuario);
+
+                contraseña = PasswordGenerator.getPassword(PasswordGenerator.NUMEROS+
                      PasswordGenerator.MINUSCULAS+
                      PasswordGenerator.MAYUSCULAS+
                      PasswordGenerator.ESPECIALES,10);
         
         user.setPassword(contraseña);
-        
+         
         EnviarCorreoScrum send = new EnviarCorreoScrum(user.getEmail(),user.getPassword());
         send.enviarCorreo();
         
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
         UserJpaController pjc = new UserJpaController(emf);
         try {
             //project.set
@@ -115,6 +127,41 @@ public class RegistrarBean {
             pjc.create(user);
         } catch(Exception e) {
             System.out.println(e);
+            }
+        
         }
+            
+         else{
+        
+         user = (User) listaCorreo.get(0);
+         
+         if(user.getName().equals("0000default") && user.getEmail().equals(correo)){ // se editan las caracteristicas del usuario por defecto
+         
+                user.setName(nombre);
+                user.setLastname(apellido);
+                user.setDocid(identidad);
+                user.setUsername(nombreusuario);
+
+                contraseña = PasswordGenerator.getPassword(PasswordGenerator.NUMEROS+
+                     PasswordGenerator.MINUSCULAS+
+                     PasswordGenerator.MAYUSCULAS+
+                     PasswordGenerator.ESPECIALES,10);
+        
+                user.setPassword(contraseña);
+         
+             UserJpaController pjc = new UserJpaController(emf);
+              try {
+        
+                pjc.edit(user);
+                } catch(Exception e) {
+                System.out.println(e);
+                }
+         
+         }
+         else{
+         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Ese correo ", "Ya esta registrado"));
+         }
+         
+         }
     }
 }

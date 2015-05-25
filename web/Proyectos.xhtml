@@ -121,11 +121,10 @@
            
             </p:dialog>
        </h:form>
-
       
-     <h:form id="ListaProyectos">
+    <h:form id="ListaProyectos">
         
-        <p:panel header="Lista de Proyectos">
+        <p:panel header="Lista de Proyectos Manager">
             <p:contextMenu id="TablaProyectosContextMenu" for="listaDatosProyectos">  
                 <p:menuitem value="Crear" onclick="document.getElementById('ListaProyectos:crearButton').click();" icon="ui-icon-plus"/>
                 <p:menuitem value="Ver" onclick="document.getElementById('ListaProyectos:verButton').click();" icon="ui-icon-search"/>
@@ -134,7 +133,7 @@
                
             </p:contextMenu>
             <p:dataTable id="listaDatosProyectos"
-                         value="#{listaProyectoBean.list}"
+                         value="#{listaProyectoBean.proyectosPropios}"
                          var="pro"
                          rowKey="#{pro.idproyecto}"
                          paginator="true"
