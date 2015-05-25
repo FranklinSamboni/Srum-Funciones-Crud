@@ -46,10 +46,10 @@
             <h:outputText value="Ingrese correo electronico de quien va a invitar"/>
             <h:inputText value="#{participanteBean.correo}" />
             </h:panelGrid>
-         <p:commandButton id="Invitarparticipantes"  icon="ui-icon-search" value="Invitarparticipantes" update=":ListaParticipante:listaDatosParticipante" actionListener="#{participanteBean.crearParticipante}"/>
+         <p:commandButton id="Invitarparticipantes"  icon="ui-icon-search" value="Invitarparticipantes" update=":ListaParticipante:info" actionListener="#{participanteBean.crearParticipante}"/>
       </p:panel>
       
-      <p:dialog id="dlgshow" widgetVar="informacion" modal="true"
+      <p:dialog id="dlgshow" widgetVar="EnvioCorreo" modal="true"
                       header="Regristro" showEffect="fade"
                       resizable="false" minWidth="600" hideEffect="fade">
                 <p:outputPanel id="info">
