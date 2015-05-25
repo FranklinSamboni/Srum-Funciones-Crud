@@ -37,7 +37,7 @@ public class ComentarioJpaController implements Serializable {
     public void create(Comentario comentario) throws RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-           // utx.begin();
+         //   utx.begin();
             em = getEntityManager();
             em.getTransaction().begin();
             Actividad idactividad = comentario.getIdactividad();
@@ -50,11 +50,11 @@ public class ComentarioJpaController implements Serializable {
                 idactividad.getComentarioList().add(comentario);
                 idactividad = em.merge(idactividad);
             }
-           // utx.commit();
+          //  utx.commit();
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-            //    utx.rollback();
+               // utx.rollback();
                 em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
@@ -70,7 +70,7 @@ public class ComentarioJpaController implements Serializable {
     public void edit(Comentario comentario) throws NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-           // utx.begin();
+         //   utx.begin();
             em = getEntityManager();
             em.getTransaction().begin();
             Comentario persistentComentario = em.find(Comentario.class, comentario.getIdcomentario());
@@ -89,11 +89,11 @@ public class ComentarioJpaController implements Serializable {
                 idactividadNew.getComentarioList().add(comentario);
                 idactividadNew = em.merge(idactividadNew);
             }
-           // utx.commit();
+          //  utx.commit();
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-               // utx.rollback
+              //  utx.rollback();
                 em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
@@ -119,6 +119,7 @@ public class ComentarioJpaController implements Serializable {
            // utx.begin();
             em = getEntityManager();
             em.getTransaction().begin();
+            
             Comentario comentario;
             try {
                 comentario = em.getReference(Comentario.class, id);

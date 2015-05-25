@@ -162,7 +162,7 @@ public class ParticipanteBean {
     public void eliminarParticipante(){
     
        
-            System.out.println("NO ES NULO");
+        System.out.println("NO ES NULO");
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
         ParticipanteJpaController pjc = new ParticipanteJpaController(emf);
         
@@ -185,6 +185,8 @@ public class ParticipanteBean {
     }
     
     public void crearParticipante(){
+        
+        System.out.println("coRREO =" + correo);
            
          if(correo!=null){
              
@@ -212,6 +214,7 @@ public class ParticipanteBean {
               user.setName("0000default");
               user.setPassword("0000default");
               user.setUsername("0000default");
+              System.out.println("idProyectoSeleccion: "+ idProyectoSeleccion);
               
               user.setInvitacion(idProyectoSeleccion);
               
@@ -236,6 +239,9 @@ public class ParticipanteBean {
              
          }
        }
+         else{
+             System.out.println("coRREO =" + correo);
+         }
      }
     
     
@@ -252,7 +258,7 @@ public class ParticipanteBean {
             
             Query q = em.createNamedQuery("Proyecto.findByIdproyecto"); // se obtiene el proyecto al que fue invitado
             q.setParameter("idproyecto", usuario.getInvitacion()); 
-            List listInvitado = q.getResultList(); // se obtiene un usuario que coincida con el correo o si no existe es nulo
+            List listInvitado = q.getResultList(); // se obtiene un Proyecto que coincida con el id del proyecto invitado
             
             proyectoInvitado = (Proyecto) listInvitado.get(0);
             
@@ -261,10 +267,15 @@ public class ParticipanteBean {
             ParticipanteInvitado.setIdproyecto(proyectoInvitado);
             
             ParticipanteJpaController injpa = new ParticipanteJpaController(emf);
-            
+            UserJpaController upa = new UserJpaController(emf);
+            usuario.setInvitacion(0); // se borra la notificacion de invitacion.
+            upa.edit(usuario);
             try{
+            
+                
             injpa.create(ParticipanteInvitado);
-            return "Principal?faces-redirect=true";
+            
+                return "Principal?faces-redirect=true";
             }catch(Exception e)  {
                 System.out.println(e);
             return "Error?faces-redirect=true";
@@ -293,4 +304,21 @@ public class ParticipanteBean {
             
                 }
     }
+    
+    
+    public void crearInvitacion(){
+    
+        if(idProyectoSeleccion!=null){
+            
+            System.out.println("Proyecto seleccionado :"+ idProyectoSeleccion);
+            
+        }
+        else{
+            System.out.println("No se selecciono proyecto"+ idProyectoSeleccion);
+            
+        
+        }
+        
+    }
+    
 }

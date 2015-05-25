@@ -36,22 +36,22 @@ public class ListaProyectoBean {
      * Creates a new instance of ListaProyectoBean
      */
     private Proyecto seleccion ;
-    private List<Proyecto> list;
-    private List<Proyecto> proyectosPropios;
+    private List<Proyecto> list; // toda la lista de proyecto
+    private List<Proyecto> proyectosPropios; // proyecto en los que el es manager
       
     public ListaProyectoBean() {
     }
 
     public List<Proyecto> getProyectosPropios() {
         
-        FacesContext context = FacesContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance(); // extrae la informacion del usuario que tiene la session activa
         User usuario = ((SessionBean)(context.getApplication().evaluateExpressionGet(
                     context, "#{sessionBean}", Object.class))).getUser();
        
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
         EntityManager em = emf.createEntityManager();
         
-        Query q = em.createNamedQuery("Proyecto.findByAllproyectoUser");
+        Query q = em.createNamedQuery("Proyecto.findByAllproyectoUser"); // extrae una lista de proyectos del usuario
         q.setParameter("iduser", usuario.getIduser());
         proyectosPropios = q.getResultList();
         return proyectosPropios;
@@ -72,26 +72,27 @@ public class ListaProyectoBean {
     public List<Proyecto> getList() {
         
         list = new ArrayList<>();
-        FacesContext context = FacesContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance(); // informacion del usuario
         User usuario = ((SessionBean)(context.getApplication().evaluateExpressionGet(
                     context, "#{sessionBean}", Object.class))).getUser();
        
+        // lista de proyectos en los que es participante
         List<Proyecto> ListaPro = ((ParticipanteBean)(context.getApplication().evaluateExpressionGet(
                     context, "#{participanteBean}", Object.class))).getListaProyectoPart();
         
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
         EntityManager em = emf.createEntityManager();
         
-        Query q = em.createNamedQuery("Proyecto.findByAllproyectoUser");
+        Query q = em.createNamedQuery("Proyecto.findByAllproyectoUser");  //extraemos los proyectos propios
         q.setParameter("iduser", usuario.getIduser());
-        list = q.getResultList();
+        list = q.getResultList(); 
         
         int element1 = list.size();
         int element2 = ListaPro.size();
         
         for (int i=0;i<element2;i++){
         
-            list.add(element1+i, ListaPro.get(i));
+            list.add(element1+i, ListaPro.get(i)); // suma lista de proyectos propios y los proyectos en los que participa
         
         
         }
@@ -115,7 +116,7 @@ public class ListaProyectoBean {
         GregorianCalendar fecha = new GregorianCalendar();
         Date d = fecha.getTime();
         
-        seleccion.setRegistrationdateProyecto(d);
+        seleccion.setRegistrationdateProyecto(d); // se le asigna fecha de registro
         seleccion.setUpdatedateProyecto(d);
         
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
@@ -127,8 +128,8 @@ public class ListaProyectoBean {
             User useri = ((SessionBean)(context.getApplication().evaluateExpressionGet(
                     context, "#{sessionBean}", Object.class))).getUser();
             
-            seleccion.setManager(useri);
-            pjc.create(seleccion);
+            seleccion.setManager(useri); // se le manda el administrador del proyecto
+            pjc.create(seleccion); // crear
         } catch(Exception e) {
             System.out.println(e);
         }
@@ -140,7 +141,7 @@ public class ListaProyectoBean {
         ProyectoJpaController pjc = new ProyectoJpaController(emf);
         
          try {
-                pjc.destroy(seleccion.getIdproyecto());
+                pjc.destroy(seleccion.getIdproyecto()); // lo elimina
             
         } catch(Exception e) {
             System.out.println(e);
@@ -153,14 +154,14 @@ public class ListaProyectoBean {
         GregorianCalendar fecha = new GregorianCalendar();
         Date d = fecha.getTime();
         
-        seleccion.setUpdatedateProyecto(d);
+        seleccion.setUpdatedateProyecto(d); // Se actualiza la ultima modificacion del proyecto
         
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("SCRUMproyectoPU");
         ProyectoJpaController pjc = new ProyectoJpaController(emf);
         
         try {
             
-            pjc.edit(seleccion);
+            pjc.edit(seleccion); // se edita
             
         } catch(Exception e) {
             System.out.println(e);

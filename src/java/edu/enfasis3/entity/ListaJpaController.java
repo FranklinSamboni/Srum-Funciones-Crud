@@ -70,11 +70,11 @@ public class ListaJpaController implements Serializable {
                     oldIdlistaOfActividadListActividad = em.merge(oldIdlistaOfActividadListActividad);
                 }
             }
-          //  utx.commit();
+            //utx.commit();
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-              //  utx.rollback();
+               // utx.rollback();
                 em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
@@ -141,11 +141,11 @@ public class ListaJpaController implements Serializable {
                     }
                 }
             }
-           // utx.commit();
+            //utx.commit();
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-                //utx.rollback();
+               // utx.rollback();
                 em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
@@ -168,7 +168,7 @@ public class ListaJpaController implements Serializable {
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-          //  utx.begin();
+         //   utx.begin();
             em = getEntityManager();
             em.getTransaction().begin();
             Lista lista;
@@ -195,11 +195,11 @@ public class ListaJpaController implements Serializable {
                 idproyecto = em.merge(idproyecto);
             }
             em.remove(lista);
-            //utx.commit();
+          //  utx.commit();
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-             //  utx.rollback();
+               // utx.rollback();
                 em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);

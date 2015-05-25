@@ -39,6 +39,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Lista.findAll", query = "SELECT l FROM Lista l"),
     @NamedQuery(name = "Lista.findByProyectoLista", query = "SELECT l FROM Lista l JOIN l.idproyecto AS p JOIN p.manager AS u WHERE u.iduser = :iduser"),
     @NamedQuery(name = "Lista.findByProyectos", query = "SELECT l FROM Lista l JOIN l.idproyecto AS p WHERE p.idproyecto = :idproyecto"),
+ 
+    
     @NamedQuery(name = "Lista.findByIdlista", query = "SELECT l FROM Lista l WHERE l.idlista = :idlista"),
     @NamedQuery(name = "Lista.findByNameLista", query = "SELECT l FROM Lista l WHERE l.nameLista = :nameLista"),
     @NamedQuery(name = "Lista.findByObservationLista", query = "SELECT l FROM Lista l WHERE l.observationLista = :observationLista"),

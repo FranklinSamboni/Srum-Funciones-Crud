@@ -39,9 +39,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "User.findByUsername", query = "SELECT u FROM User u WHERE u.username = :username"),
     @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password"),
     @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
-    @NamedQuery(name = "User.findByPhoto", query = "SELECT u FROM User u WHERE u.photo = :photo")})
-    @NamedQuery(name = "User.findByInvitacion", query = "SELECT u FROM User u WHERE u.invitacion = :invitacion")
-
+    @NamedQuery(name = "User.findByPhoto", query = "SELECT u FROM User u WHERE u.photo = :photo"),
+    @NamedQuery(name = "User.findByInvitacion", query = "SELECT u FROM User u WHERE u.invitacion = :invitacion")})
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -83,11 +82,8 @@ public class User implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "photo")
     private String photo;
-    
-    @Basic(optional = true)
     @Column(name = "invitacion")
     private Integer invitacion;
-    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "manager")
     private List<Proyecto> proyectoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "iduser")
@@ -173,7 +169,7 @@ public class User implements Serializable {
     public void setPhoto(String photo) {
         this.photo = photo;
     }
-    
+
     public Integer getInvitacion() {
         return invitacion;
     }

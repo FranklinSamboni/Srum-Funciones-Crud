@@ -132,11 +132,13 @@ public class RegistrarBean {
         }
             
          else{
-        
+             
          user = (User) listaCorreo.get(0);
          
          if(user.getName().equals("0000default") && user.getEmail().equals(correo)){ // se editan las caracteristicas del usuario por defecto
          
+             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Informacion registrada", "Se ha enviado un correo a la direccion de correo ingresada."));
+                
                 user.setName(nombre);
                 user.setLastname(apellido);
                 user.setDocid(identidad);
@@ -156,7 +158,9 @@ public class RegistrarBean {
                 } catch(Exception e) {
                 System.out.println(e);
                 }
-         
+               EnviarCorreoScrum send = new EnviarCorreoScrum(user.getEmail(),user.getPassword());
+               send.enviarCorreo();
+       
          }
          else{
          FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Ese correo ", "Ya esta registrado"));

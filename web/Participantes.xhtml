@@ -29,19 +29,38 @@
         </p:megaMenu>
         </h:form>
 
-      <h:form class="option animated bounceInRight">
+      <h:form id="sede" class="option animated bounceInRight">
             
      <p:panel header="Seleccione Proyecto" style="margin-bottom:10px;">
         <h:panelGrid columns="2" cellpadding="5">
             <p:outputLabel for="proyecto" value="Proyecto:  " />
             <p:selectOneMenu id="proyecto" value="#{participanteBean.idProyectoSeleccion}" style="width:150px">
-                <p:ajax listener="#{listaActividadesBean.actualizarTabla}" update=":ListaParticipante:listaDatosParticipante"/>
+                <p:ajax listener="#{participanteBean.crearInvitacion}" update=":ListaParticipante:listaDatosParticipante :sede:Invitarparticipantes"/>
                 <f:selectItem itemLabel="Seleccione proyecto" itemValue="" noSelectionOption="true" />
                 <f:selectItems value="#{listaProyectoBean.proyectosPropios}" var="pro" itemLabel="#{pro.nameProyecto}"  itemValue="#{pro.idproyecto}"/>
             </p:selectOneMenu>
          
        </h:panelGrid>
-     </p:panel>
+       <h:panelGrid columns="2">
+            
+            <h:outputText value="Ingrese correo electronico de quien va a invitar"/>
+            <h:inputText value="#{participanteBean.correo}" />
+            </h:panelGrid>
+         <p:commandButton id="Invitarparticipantes"  icon="ui-icon-search" value="Invitarparticipantes" update=":ListaParticipante:listaDatosParticipante" actionListener="#{participanteBean.crearParticipante}"/>
+      </p:panel>
+      
+      <p:dialog id="dlgshow" widgetVar="informacion" modal="true"
+                      header="Regristro" showEffect="fade"
+                      resizable="false" minWidth="600" hideEffect="fade">
+                <p:outputPanel id="info">
+                    <p:panelGrid columns="2">
+                        <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true"/>
+                        
+                    </p:panelGrid>
+                <p:commandButton oncomplete="PF('informacion').hide()" value="continuar" action="index?faces-redirect=true"/>
+            </p:outputPanel>
+        </p:dialog>     
+          
             
     </h:form>
        
@@ -82,15 +101,10 @@
                 </p:column>
         </p:dataTable>
 
+            
         </p:panel>
          
         <p:panel header="INVITE A A USUARIOS A PARTICIPAR EN SU PROYECTO">
-        <h:panelGrid columns="2">
-            
-            <h:outputText value="Ingrese correo electronico de quien va a invitar"/>
-            <h:inputText value="#{participanteBean.correo}" />
-            </h:panelGrid>
-            <p:commandButton id="Invitarparticipantes"  icon="ui-icon-search" value="Invitarparticipantes" update=":ListaParticipante:listaDatosParticipante" actionListener="#{participanteBean.crearParticipante}"/>
         
         </p:panel>    
             

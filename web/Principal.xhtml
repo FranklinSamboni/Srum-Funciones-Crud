@@ -34,8 +34,9 @@
            <h1> <p:outputLabel class="option animated flip" style=" font-family:Shadows Into Light; color: blueviolet" value= "SERVICIO DE SEGUIMIENTO DE PROYECTOS SCRUM"/>  </h1>
           <h:form >
                  
-               
-               <h:panelGrid columns="2">
+              <c:if test="#{sessionBean.user.invitacion > 0}" > 
+                  <p:panel header="NOTIFICACIÓN" style="position: absolute; right: 30%;left: 30%;top: 250px">
+                  <h:panelGrid columns="2" >
                    
                    <h:outputText value="Ha sido invitado al proyecto: "/>
                    <h:outputText value="#{sessionBean.user.invitacion}"/>
@@ -44,7 +45,8 @@
                    <p:commandButton value="Rechazar Invitacion" action="#{participanteBean.rechazarInvitacion}"/>
                    
                </h:panelGrid>      
-               
+                  </p:panel>
+              </c:if>
                 
             </h:form>
               

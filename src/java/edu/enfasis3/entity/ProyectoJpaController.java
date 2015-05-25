@@ -88,11 +88,11 @@ public class ProyectoJpaController implements Serializable {
                     oldIdproyectoOfParticipanteListParticipante = em.merge(oldIdproyectoOfParticipanteListParticipante);
                 }
             }
-            //utx.commit();
+           // utx.commit();
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-               // utx.rollback();
+            //    utx.rollback();
                 em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
@@ -191,7 +191,7 @@ public class ProyectoJpaController implements Serializable {
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-              //  utx.rollback();
+            //    utx.rollback();
                 em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
@@ -214,7 +214,7 @@ public class ProyectoJpaController implements Serializable {
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-          //  utx.begin();
+            //utx.begin();
             em = getEntityManager();
             em.getTransaction().begin();
             Proyecto proyecto;
@@ -248,12 +248,13 @@ public class ProyectoJpaController implements Serializable {
                 manager = em.merge(manager);
             }
             em.remove(proyecto);
-          //  utx.commit();
+           // utx.commit();
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
                // utx.rollback();
                 em.getTransaction().rollback();
+                
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }

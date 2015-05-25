@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Participante.findListaParticipante", query = "SELECT p FROM Participante p JOIN p.iduser AS u WHERE u.iduser = :iduser"),
     @NamedQuery(name = "Participante.findUsuariosEnProyecto", query = "SELECT p FROM Participante p JOIN p.idproyecto AS m WHERE m.idproyecto = :idproyecto"),
     
+    
     @NamedQuery(name = "Participante.findByIdparticipante", query = "SELECT p FROM Participante p WHERE p.idparticipante = :idparticipante")})
 public class Participante implements Serializable {
     private static final long serialVersionUID = 1L;

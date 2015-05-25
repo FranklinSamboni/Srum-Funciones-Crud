@@ -45,7 +45,7 @@ public class UserJpaController implements Serializable {
         }
         EntityManager em = null;
         try {
-            //utx.begin();
+          //  utx.begin();
             em = getEntityManager();
             em.getTransaction().begin();
             List<Proyecto> attachedProyectoList = new ArrayList<Proyecto>();
@@ -83,7 +83,7 @@ public class UserJpaController implements Serializable {
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-               // utx.rollback();
+             //   utx.rollback();
                 em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
@@ -168,7 +168,7 @@ public class UserJpaController implements Serializable {
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-             //   utx.rollback();
+              //  utx.rollback();
                 em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
@@ -191,9 +191,9 @@ public class UserJpaController implements Serializable {
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-          //  utx.begin();
+            //utx.begin();
             em = getEntityManager();
-            em.getTransaction().begin();
+           em.getTransaction().begin();
             User user;
             try {
                 user = em.getReference(User.class, id);
@@ -220,7 +220,7 @@ public class UserJpaController implements Serializable {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             em.remove(user);
-            //utx.commit();
+         //   utx.commit();
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {

@@ -45,7 +45,7 @@ public class EnviarCorreoScrum {
         c.setUsuarioCorreo("elric941@gmail.com");
         c.setAsunto("Invitacion a proyecto SCRUM");
         c.setMensaje("Ha sido invitado a ser parte de un proyecto SCRUM, Ingrese a el siguiente link"
-                + " para aceptar la invitación http://localhost:11318/SCRUMproyecto/faces/index.xhtml"); 
+                + " para aceptar la invitación http://192.168.0.10:11318/SCRUMproyecto/faces/index.xhtml"); 
         c.setDestino(destino);
         
         c.setNombreArchivo("Verificacion.txt");
@@ -64,7 +64,7 @@ public class EnviarCorreoScrum {
         c.setAsunto("Correo de verificacion");
         c.setMensaje("Ha sido invitado a ser parte de un proyecto SCRUM, Ingrese a el siguiente link"
                    + "para registrarse y aceptar la "
-                   + "invitacion http://localhost:11318/SCRUMproyecto/faces/RegistrarUsuarios.xhtml");
+                   + "invitacion http://192.168.0.10:11318/SCRUMproyecto/faces/RegistrarUsuarios.xhtml");
         c.setDestino(destino);
         
         c.setNombreArchivo("Verificacion.txt");

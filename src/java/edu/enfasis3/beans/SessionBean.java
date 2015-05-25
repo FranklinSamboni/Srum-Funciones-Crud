@@ -83,6 +83,7 @@ public class SessionBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         if (!res.isEmpty()) {
             user = (User)res.get(0);
+            System.out.println("El loguin y password es: "+ user.getUsername()+"  "+user.getPassword());
             //System.out.println("la contraseña es :" + user.getPassword());
         
             if (password.equals(user.getPassword())) {
@@ -90,12 +91,12 @@ public class SessionBean implements Serializable {
                 page="Principal"+"?faces-redirect=true";
             } else {
                 validation = false;
-                context.addMessage(null, new FacesMessage("Informacion Incorrecta",  "Intentelo nuevamente") );
+                context.addMessage(null, new FacesMessage("Contraseña incorrecta",  "Intentelo nuevamente") );
                 page="index";
             }
         } else {
             validation = false;
-            context.addMessage(null, new FacesMessage("Informacion Incorrecta",  "Intentelo nuevamente") );
+            context.addMessage(null, new FacesMessage("El nombre de usuario o contraseña estan mal",  "Intentelo nuevamente") );
             page="index";
         }
         return page;

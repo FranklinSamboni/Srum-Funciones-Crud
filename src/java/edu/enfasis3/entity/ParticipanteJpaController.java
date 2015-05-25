@@ -63,7 +63,7 @@ public class ParticipanteJpaController implements Serializable {
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-             //   utx.rollback();
+               // utx.rollback();
                 em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
@@ -79,7 +79,7 @@ public class ParticipanteJpaController implements Serializable {
     public void edit(Participante participante) throws NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            //.begin();
+          //  utx.begin();
             em = getEntityManager();
             em.getTransaction().begin();
             Participante persistentParticipante = em.find(Participante.class, participante.getIdparticipante());
@@ -112,11 +112,11 @@ public class ParticipanteJpaController implements Serializable {
                 iduserNew.getParticipanteList().add(participante);
                 iduserNew = em.merge(iduserNew);
             }
-            //utx.commit();
+          //  utx.commit();
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-               // utx.rollback();
+              //  utx.rollback();
                 em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
@@ -160,11 +160,11 @@ public class ParticipanteJpaController implements Serializable {
                 iduser = em.merge(iduser);
             }
             em.remove(participante);
-            //utx.commit();
+           // utx.commit();
             em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-             //   utx.rollback();
+              //  utx.rollback();
                 em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
